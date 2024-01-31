@@ -1,5 +1,5 @@
 import React from "react";
-import capybara from "../assets/capybara.jpg";
+import uc from "../assets/uc.png";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { Link } from "react-scroll";
 
@@ -35,7 +35,7 @@ const Home = () => {
 
         <div>
           <img
-            src={capybara}
+            src={uc}
             alt="my profile"
             className="rounded-2xl mx-auto w-2/3 md:w-full"
           />
