@@ -9,17 +9,17 @@ const SocialLinks = () => {
       id: 1,
       child: (
         <>
-          LinkedIn <FaLinkedin size={30} />
+          <FaLinkedin size={30} />LinkedIn
         </>
       ),
       href: "https://www.linkedin.com/in/nishantluhera/",
-      style: "rounded-tr-md",
+      style: "rounded-tl-md",
     },
     {
       id: 2,
       child: (
         <>
-          GitHub <FaGithub size={30} />
+          <FaGithub size={30} />GitHub
         </>
       ),
       href: "https://github.com/nishantkluhera",
@@ -28,7 +28,7 @@ const SocialLinks = () => {
       id: 3,
       child: (
         <>
-          Mail <HiOutlineMail size={30} />
+          <HiOutlineMail size={30} />Mail
         </>
       ),
       href: "mailto:nishant.luhera@gmail.com",
@@ -37,11 +37,11 @@ const SocialLinks = () => {
       id: 4,
       child: (
         <>
-          Resume <FaFilePdf size={30} />
+          <FaFilePdf size={30} />Resume
         </>
       ),
       href: "/resume.pdf",
-      style: "rounded-br-md",
+      style: "rounded-bl-md",
       download: true,
     },
   ];
