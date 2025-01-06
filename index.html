@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nishant Luhera Portfolio basic</title>
+    <title>Nishant Luhera Portfolio</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
     <style>
@@ -142,18 +142,22 @@
             font-size: 0.85rem;
         }
 
-        .stats {
+        .social-links {
             display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
             gap: 1rem;
-            font-size: 1rem;
+            margin-top: 1rem;
         }
 
-        .stats span {
-            background: var(--hover-bg);
-            border-radius: 0.5rem;
-            padding: 0.5rem 1rem;
+        .social-links a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            text-decoration: underline;
+            color: var(--primary-light);
         }
     </style>
 </head>
@@ -166,6 +170,15 @@
 
         <div id="profile" class="card"></div>
         <div id="stats" class="card"></div>
+
+        <h2 class="section-title">Social Links</h2>
+        <div class="card">
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/nishantkluhera/" target="_blank">LinkedIn</a>
+                <a href="https://x.com/nishantluhera" target="_blank">Twitter</a>
+                <a href="https://github.com/nishantkluhera" target="_blank">GitHub</a>
+            </div>
+        </div>
 
         <h2 class="section-title">GitHub Stats</h2>
         <div id="github-stats" class="card"></div>
