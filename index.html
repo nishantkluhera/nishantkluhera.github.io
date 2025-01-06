@@ -3,32 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Portfolio</title>
+    <title>GitHub baisc Portfolio</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
         :root {
-            --primary: #2563eb;
-            --primary-light: #60a5fa;
-            --bg: #ffffff;
-            --text: #1f2937;
-            --card-bg: #ffffff;
-            --card-border: #e5e7eb;
-            --hover-bg: #f3f4f6;
+            --primary: #4F46E5;
+            --primary-light: #818CF8;
+            --bg: #F9FAFB;
+            --text: #111827;
+            --card-bg: #FFFFFF;
+            --card-border: #E5E7EB;
+            --hover-bg: #EFF6FF;
             --max-width: 1200px;
-            --content-padding: max(2rem, calc((100vw - var(--max-width)) / 2));
+            --content-padding: 2rem;
+            --transition: all 0.3s ease;
         }
 
         .dark {
-            --primary: #60a5fa;
-            --primary-light: #93c5fd;
-            --bg: #0f172a;
-            --text: #e2e8f0;
-            --card-bg: #1e293b;
-            --card-border: #334155;
-            --hover-bg: #2d3748;
+            --primary: #818CF8;
+            --primary-light: #A5B4FC;
+            --bg: #1F2937;
+            --text: #F9FAFB;
+            --card-bg: #374151;
+            --card-border: #4B5563;
+            --hover-bg: #475569;
         }
 
         * {
@@ -38,245 +39,177 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            min-height: 100vh;
+            transition: var(--transition);
         }
 
         .container {
-            padding: 2rem var(--content-padding);
-        }
-
-        .content-wrapper {
+            padding: var(--content-padding);
             max-width: var(--max-width);
             margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem;
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text);
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: var(--hover-bg);
         }
 
         .card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 1rem;
-            padding: clamp(1.5rem, 4vw, 2.5rem);
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile-card {
-            display: grid;
-            grid-template-columns: minmax(auto, 180px) 1fr;
-            gap: clamp(1.5rem, 4vw, 3rem);
-            align-items: start;
-        }
-
-        .avatar {
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 1rem;
-            object-fit: cover;
-            border: 3px solid var(--primary);
-            transition: transform 0.3s ease;
-        }
-
-        .avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .name {
-            font-size: clamp(1.8rem, 5vw, 2.5rem);
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1.2;
-        }
-
-        .bio {
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            opacity: 0.9;
+            padding: 1.5rem;
             margin-bottom: 1.5rem;
-            max-width: 65ch;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
         }
 
-        .stats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
 
-        .stat-item {
+        .profile {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 2rem;
+        }
+
+        .profile img {
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+        }
+
+        .profile-details {
+            flex: 1;
+        }
+
+        .profile-details h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-details p {
+            font-size: 1rem;
+            margin-bottom: 1rem;
         }
 
         .social-links {
             display: flex;
-            flex-wrap: wrap;
             gap: 1rem;
-            margin-top: 1rem;
         }
 
         .social-link {
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
-            color: var(--text);
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50%;
+            color: var(--text);
+            transition: var(--transition);
             text-decoration: none;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
         }
 
         .social-link:hover {
             background: var(--hover-bg);
-            transform: translateY(-2px);
         }
 
         .section-title {
-            font-size: clamp(1.5rem, 4vw, 1.75rem);
+            font-size: 1.5rem;
             font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text);
+            margin-bottom: 1rem;
         }
 
         .repos-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
         }
 
         .repo-card {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
             padding: 1.5rem;
+            border-radius: 1rem;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 1rem;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: var(--transition);
         }
 
         .repo-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
 
-        .repo-name {
-            color: var(--primary);
+        .repo-card h3 {
             font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 1rem;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
         }
 
-        .repo-desc {
+        .repo-card p {
             font-size: 0.95rem;
-            opacity: 0.9;
-            margin-bottom: 1.5rem;
-            flex-grow: 1;
+            margin-bottom: 1rem;
         }
 
-        .repo-stats {
+        .repo-card .repo-stats {
             display: flex;
-            flex-wrap: wrap;
             gap: 1rem;
             font-size: 0.85rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--card-border);
-        }
-
-        .theme-toggle {
-            position: fixed;
-            top: 1.5rem;
-            right: 1.5rem;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 0.75rem;
-            padding: 0.75rem;
-            cursor: pointer;
-            font-size: 1.25rem;
-            z-index: 1000;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 200px;
-        }
-
-        .loading::after {
-            content: "";
-            width: 48px;
-            height: 48px;
-            border: 4px solid var(--card-border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            .profile-card {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .avatar {
-                max-width: 180px;
-                margin: 0 auto;
-            }
-
-            .stats, .social-links {
-                justify-content: center;
-            }
-
-            .container {
-                padding: 1rem;
-            }
-        }
-
-        .feather {
-            width: 1em;
-            height: 1em;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            fill: none;
         }
     </style>
 </head>
 <body>
-    <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
     <div class="container">
-        <div class="content-wrapper">
-            <div id="profile" class="card loading"></div>
-            <div id="repos" class="loading"></div>
+        <div class="header">
+            <h1>GitHub Portfolio</h1>
+            <button class="theme-toggle" onclick="toggleTheme()">🌓 Switch Theme</button>
         </div>
+
+        <div id="profile" class="card"></div>
+
+        <h2 class="section-title">Repositories</h2>
+        <div id="repos" class="repos-grid"></div>
     </div>
 
     <script>
-        // Configuration
         const config = {
             github: 'nishantkluhera',
             social: {
-                // Add your full profile URLs here
                 linkedin: 'https://www.linkedin.com/in/nishantkluhera/',
                 //twitter: 'https://twitter.com/your-profile',
                 //instagram: 'https://instagram.com/your-profile',
@@ -289,128 +222,61 @@
             localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
         }
 
-        // Initialize theme
-        if (localStorage.getItem('theme') === 'dark' || 
-            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.body.classList.add('dark');
-        }
-
-        // Get social platform name from URL
-        function getPlatformFromUrl(url) {
-            try {
-                const hostname = new URL(url).hostname;
-                return hostname.split('.')[1];
-            } catch (e) {
-                return '';
-            }
-        }
-
         async function fetchProfile() {
+            const profileElement = document.getElementById('profile');
             try {
                 const response = await fetch(`https://api.github.com/users/${config.github}`);
                 const profile = await response.json();
-                
-                const socialLinksHTML = Object.entries(config.social)
-                    .filter(([_, url]) => url) // Only show configured social links
-                    .map(([_, url]) => {
-                        const platform = getPlatformFromUrl(url);
-                        return `
-                            <a href="${url}" target="_blank" rel="noopener noreferrer" class="social-link">
-                                <i data-feather="${platform}"></i>
-                                <span>${platform.charAt(0).toUpperCase() + platform.slice(1)}</span>
-                            </a>
-                        `;
-                    }).join('');
 
-                document.getElementById('profile').innerHTML = `
-                    <div class="profile-card">
-                        <div class="avatar-container">
-                            <img src="${profile.avatar_url}" alt="Profile" class="avatar">
-                        </div>
-                        <div class="profile-info">
-                            <h1 class="name">${profile.name || config.github}</h1>
-                            <p class="bio">${profile.bio || 'Software Developer passionate about creating innovative solutions'}</p>
-                            <div class="stats">
-                                <span class="stat-item">
-                                    <i data-feather="users"></i>
-                                    ${profile.followers.toLocaleString()} followers
-                                </span>
-                                <span class="stat-item">
-                                    <i data-feather="user"></i>
-                                    ${profile.following.toLocaleString()} following
-                                </span>
-                                ${profile.location ? `
-                                    <span class="stat-item">
-                                        <i data-feather="map-pin"></i>
-                                        ${profile.location}
-                                    </span>
-                                ` : ''}
-                            </div>
+                profileElement.innerHTML = `
+                    <div class="profile">
+                        <img src="${profile.avatar_url}" alt="${profile.name}">
+                        <div class="profile-details">
+                            <h2>${profile.name || config.github}</h2>
+                            <p>${profile.bio || "Developer passionate about building cool things!"}</p>
                             <div class="social-links">
-                                ${socialLinksHTML}
+                                ${Object.entries(config.social).map(([key, url]) => `
+                                    <a href="${url}" class="social-link" target="_blank">
+                                        <i data-feather="${key}"></i>
+                                    </a>`).join('')}
                             </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
                 feather.replace();
             } catch (error) {
-                document.getElementById('profile').innerHTML = `
-                    <p>Error loading profile. Please check the username and try again.</p>
-                `;
+                console.error('Error fetching profile:', error);
             }
         }
 
         async function fetchRepos() {
+            const reposElement = document.getElementById('repos');
             try {
-                const response = await fetch(`https://api.github.com/users/${config.github}/repos?sort=updated&per_page=6`);
+                const response = await fetch(`https://api.github.com/users/${config.github}/repos`);
                 const repos = await response.json();
-                
-                document.getElementById('repos').innerHTML = `
-                    <h2 class="section-title">Latest Projects</h2>
-                    <div class="repos-grid">
-                        ${repos.map(repo => `
-                            <div class="repo-card">
-                                <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="repo-name">
-                                    <i data-feather="github"></i>
-                                    ${repo.name}
-                                </a>
-                                <p class="repo-desc">${repo.description || 'No description available'}</p>
-                                <div class="repo-stats">
-                                    <span class="stat-item">
-                                        <i data-feather="star"></i>
-                                        ${repo.stargazers_count}
-                                    </span>
-                                    <span class="stat-item">
-                                        <i data-feather="git-branch"></i>
-                                        ${repo.forks_count}
-                                    </span>
-                                    ${repo.language ? `
-                                        <span class="stat-item">
-                                            <i data-feather="code"></i>
-                                            ${repo.language}
-                                        </span>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                feather.replace();
+
+                reposElement.innerHTML = repos.map(repo => `
+                    <div class="repo-card">
+                        <h3>${repo.name}</h3>
+                        <p>${repo.description || "No description available."}</p>
+                        <div class="repo-stats">
+                            <span>⭐ ${repo.stargazers_count}</span>
+                            <span>🍴 ${repo.forks_count}</span>
+                        </div>
+                    </div>`).join('');
             } catch (error) {
-                document.getElementById('repos').innerHTML = `
-                    <p>Error loading repositories. Please try again later.</p>
-                `;
+                console.error('Error fetching repos:', error);
             }
         }
 
-        // Initialize Feather Icons
         document.addEventListener('DOMContentLoaded', () => {
-            feather.replace();
-        });
+            fetchProfile();
+            fetchRepos();
 
-        // Initialize
-        fetchProfile();
-        fetchRepos();
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+            }
+        });
     </script>
 </body>
 </html>
