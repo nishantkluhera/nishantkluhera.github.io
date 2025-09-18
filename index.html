@@ -3,277 +3,997 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nishant Luhera Portfolio</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <title>Nishant Luhera | Software Developer Portfolio</title>
+    <meta name="description" content="Nishant Luhera - Software Developer Portfolio showcasing projects, skills, and experience">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
         :root {
-            --primary: #8B5CF6; /* Purple/Lilac branding */
-            --primary-light: #C4B5FD;
-            --bg: #F9FAFB;
-            --text: #111827;
-            --card-bg: #FFFFFF;
-            --card-border: #E5E7EB;
-            --hover-bg: #F3E8FF;
-            --max-width: 1200px;
-            --content-padding: 2rem;
-            --transition: all 0.3s ease;
+            /* Modern Color Palette */
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            
+            /* Neutral Colors */
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            
+            /* Dark Theme Colors */
+            --dark-bg: #0f172a;
+            --dark-surface: #1e293b;
+            --dark-surface-light: #334155;
+            --dark-border: #475569;
+            --dark-text: #f1f5f9;
+            --dark-text-muted: #cbd5e1;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-dark: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            
+            /* Transitions */
+            --transition-fast: 0.15s ease-in-out;
+            --transition: 0.3s ease-in-out;
+            --transition-slow: 0.5s ease-in-out;
+            
+            /* Spacing */
+            --container-max: 1200px;
+            --container-padding: 1rem;
+            
+            /* Border radius */
+            --radius-sm: 0.375rem;
+            --radius: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.5rem;
         }
-
-        .dark {
-            --primary: #C4B5FD;
-            --primary-light: #EDE9FE;
-            --bg: #1F2937;
-            --text: #F9FAFB;
-            --card-bg: #374151;
-            --card-border: #4B5563;
-            --hover-bg: #5B21B6;
+        
+        /* Dark theme variables */
+        [data-theme="dark"] {
+            --bg-primary: var(--dark-bg);
+            --bg-secondary: var(--dark-surface);
+            --bg-tertiary: var(--dark-surface-light);
+            --text-primary: var(--dark-text);
+            --text-secondary: var(--dark-text-muted);
+            --border-color: var(--dark-border);
         }
-
+        
+        /* Light theme variables */
+        [data-theme="light"] {
+            --bg-primary: var(--white);
+            --bg-secondary: var(--gray-50);
+            --bg-tertiary: var(--gray-100);
+            --text-primary: var(--gray-900);
+            --text-secondary: var(--gray-600);
+            --border-color: var(--gray-200);
+        }
+        
+        /* Reset and base styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        
         body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
-            transition: var(--transition);
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            transition: background-color var(--transition), color var(--transition);
+            overflow-x: hidden;
         }
-
-        .container {
-            padding: var(--content-padding);
-            max-width: var(--max-width);
+        
+        /* Scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: var(--radius);
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            transition: all var(--transition);
+        }
+        
+        [data-theme="dark"] .navbar {
+            background: rgba(15, 23, 42, 0.95);
+        }
+        
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        [data-theme="dark"] .navbar.scrolled {
+            background: rgba(15, 23, 42, 0.98);
+        }
+        
+        .nav-container {
+            max-width: var(--container-max);
             margin: 0 auto;
-        }
-
-        .header {
+            padding: 0 var(--container-padding);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
         }
-
-        .header h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
+        
+        .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
         }
-
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition);
+            position: relative;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width var(--transition);
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
         .theme-toggle {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 1rem;
-            padding: 0.6rem 1rem;
+            background: none;
+            border: 2px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: var(--radius-lg);
             cursor: pointer;
-            font-size: 1rem;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            transition: all var(--transition);
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            color: var(--text);
-            transition: var(--transition);
+            justify-content: center;
         }
-
+        
         .theme-toggle:hover {
-            background: var(--hover-bg);
+            border-color: var(--primary);
+            transform: scale(1.05);
         }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 1rem;
-            padding: 1.5rem;
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-primary);
+            opacity: 0.05;
+            z-index: 0;
+        }
+        
+        [data-theme="dark"] .hero::before {
+            opacity: 0.1;
+        }
+        
+        .hero-content {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin: 0 auto 2rem;
+            background: var(--gradient-primary);
+            padding: 4px;
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .hero-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--bg-secondary);
+        }
+        
+        .hero-avatar::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 40px;
+            height: 40px;
+            background: var(--success);
+            border-radius: 50%;
+            border: 4px solid var(--bg-primary);
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: var(--text-secondary);
             margin-bottom: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: var(--transition);
+            font-weight: 500;
         }
-
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        
+        .hero-bio {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
         }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-
-        .repos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .repo-card {
-            padding: 1.5rem;
-            border-radius: 1rem;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            transition: var(--transition);
-            cursor: pointer;
-        }
-
-        .repo-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        }
-
-        .repo-card h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-
-        .repo-card p {
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-        }
-
-        .repo-card .repo-stats {
+        
+        .hero-actions {
             display: flex;
             gap: 1rem;
-            font-size: 0.85rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
         }
-
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 2rem;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all var(--transition);
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .btn-outline {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Section Styles */
+        .section {
+            padding: 5rem 0;
+            background: var(--bg-secondary);
+        }
+        
+        .section:nth-child(even) {
+            background: var(--bg-primary);
+        }
+        
+        .container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-2xl);
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+        
+        .card-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-stats {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .card-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        /* Social Links */
         .social-links {
             display: flex;
+            justify-content: center;
             gap: 1rem;
-            margin-top: 1rem;
+            margin-top: 2rem;
         }
-
-        .social-links a {
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-lg);
+            color: var(--text-secondary);
             text-decoration: none;
-            color: var(--primary);
-            font-weight: 600;
-            transition: var(--transition);
+            transition: all var(--transition);
+            font-size: 1.25rem;
         }
-
-        .social-links a:hover {
-            text-decoration: underline;
-            color: var(--primary-light);
+        
+        .social-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border-color);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-stats {
+                gap: 2rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .section {
+                padding: 3rem 0;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-avatar {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .hero-stats {
+                gap: 1.5rem;
+            }
+            
+            .stat-number {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Nishant Luhera Portfolio</h1>
-            <button class="theme-toggle" onclick="toggleTheme()">🌓 Switch Theme</button>
+<body data-theme="light">
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">NL</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#stats">Stats</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <i class="fas fa-sun"></i>
+            </button>
         </div>
+    </nav>
 
-        <div id="profile" class="card"></div>
-        <div id="stats" class="card"></div>
-
-        <h2 class="section-title">Social Links</h2>
-        <div class="card">
-            <div class="social-links">
-                <a href="https://www.linkedin.com/in/nishantkluhera/" target="_blank">LinkedIn</a>
-                <a href="https://x.com/nishantluhera" target="_blank">Twitter</a>
-                <a href="https://github.com/nishantkluhera" target="_blank">GitHub</a>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-avatar">
+                <img id="profileAvatar" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik05MCA5MEM5MCA5MCA5MCA5MCA5MCA5MFoiIGZpbGw9IiM2MzY2RjEiLz4KPC9zdmc+Cg==" alt="Profile Avatar">
+            </div>
+            <h1 class="hero-title">Nishant Luhera</h1>
+            <p class="hero-subtitle">Software Developer & Problem Solver</p>
+            <p class="hero-bio" id="heroBio">Loading profile...</p>
+            
+            <div class="hero-actions">
+                <a href="#projects" class="btn btn-primary">
+                    <i class="fas fa-code"></i>
+                    View My Work
+                </a>
+                <a href="#contact" class="btn btn-outline">
+                    <i class="far fa-envelope"></i>
+                    Get In Touch
+                </a>
+            </div>
+            
+            <div class="hero-stats" id="heroStats">
+                <div class="stat-item">
+                    <span class="stat-number" id="reposCount">--</span>
+                    <span class="stat-label">Repositories</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="followersCount">--</span>
+                    <span class="stat-label">Followers</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="leetcodeCount">--</span>
+                    <span class="stat-label">Problems Solved</span>
+                </div>
             </div>
         </div>
+    </section>
 
-        <h2 class="section-title">GitHub Stats</h2>
-        <div id="github-stats" class="card"></div>
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">About Me</h2>
+                <p class="section-subtitle">Passionate about creating innovative solutions and learning new technologies</p>
+            </div>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="card-title">Development</h3>
+                    <p class="card-description">Building modern web applications with cutting-edge technologies and best practices.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="card-title">Problem Solving</h3>
+                    <p class="card-description">Love tackling complex algorithmic challenges and optimization problems.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="card-title">Innovation</h3>
+                    <p class="card-description">Always exploring new technologies and pushing the boundaries of what's possible.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <h2 class="section-title">My Repositories</h2>
-        <div id="repos" class="repos-grid"></div>
+    <!-- Projects Section -->
+    <section class="section" id="projects">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">My Projects</h2>
+                <p class="section-subtitle">A collection of my work and contributions</p>
+            </div>
+            
+            <div class="cards-grid" id="projectsGrid">
+                <div class="loading"></div>
+            </div>
+            
+            <div class="section-header">
+                <h3 class="section-title" style="font-size: 2rem;">Shared Projects</h3>
+                <p class="section-subtitle">Collaborative work and contributions</p>
+            </div>
+            
+            <div class="cards-grid" id="sharedProjectsGrid">
+                <div class="loading"></div>
+            </div>
+        </div>
+    </section>
 
-        <h2 class="section-title">Shared Account Repositories</h2>
-        <div id="shared-repos" class="repos-grid"></div>
+    <!-- Stats Section -->
+    <section class="section" id="stats">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Statistics</h2>
+                <p class="section-subtitle">My coding journey in numbers</p>
+            </div>
+            
+            <div class="cards-grid">
+                <div class="card" id="githubStatsCard">
+                    <div class="card-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <h3 class="card-title">GitHub Activity</h3>
+                    <div id="githubStats">Loading...</div>
+                </div>
+                
+                <div class="card" id="leetcodeStatsCard">
+                    <div class="card-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3 class="card-title">LeetCode Progress</h3>
+                    <div id="leetcodeStats">Loading...</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <h2 class="section-title">LeetCode Stats</h2>
-        <div id="leetcode" class="card"></div>
-    </div>
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Let's Connect</h2>
+                <p class="section-subtitle">Feel free to reach out for collaborations or just a friendly hello</p>
+            </div>
+            
+            <div class="social-links">
+                <a href="https://github.com/nishantkluhera" target="_blank" class="social-link" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/nishantkluhera/" target="_blank" class="social-link" title="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://x.com/nishantluhera" target="_blank" class="social-link" title="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="mailto:nishant@example.com" class="social-link" title="Email">
+                    <i class="far fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </section>
 
     <script>
+        // Configuration
         const config = {
             github: 'nishantkluhera',
             sharedGithub: 'projects506',
             leetcode: 'nishantluhera'
         };
 
-        function toggleTheme() {
-            document.body.classList.toggle('dark');
-            localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        // Theme management
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            body.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
         }
+        
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+        
+        function toggleTheme() {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+        
+        themeToggle.addEventListener('click', toggleTheme);
 
-        async function fetchProfile(username, elementId) {
-            const element = document.getElementById(elementId);
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                const offset = 80; // Account for fixed navbar
+                
+                window.scrollTo({
+                    top: target.offsetTop - offset,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // API Functions
+        async function fetchProfile() {
             try {
-                const response = await fetch(`https://api.github.com/users/${username}`);
+                const response = await fetch(`https://api.github.com/users/${config.github}`);
                 const profile = await response.json();
-
-                element.innerHTML = `
-                    <h2>${profile.name || profile.login}</h2>
-                    <p>${profile.bio || "No bio available."}</p>
-                    <div class="stats">
-                        <span>👨‍💻 ${profile.public_repos} Repos</span>
-                        <span>⭐ ${profile.followers} Followers</span>
-                        <span>👥 ${profile.following} Following</span>
+                
+                // Update hero section
+                const heroBio = document.getElementById('heroBio');
+                const profileAvatar = document.getElementById('profileAvatar');
+                const reposCount = document.getElementById('reposCount');
+                const followersCount = document.getElementById('followersCount');
+                
+                heroBio.textContent = profile.bio || "Passionate software developer building innovative solutions";
+                profileAvatar.src = profile.avatar_url || profileAvatar.src;
+                reposCount.textContent = profile.public_repos || '0';
+                followersCount.textContent = profile.followers || '0';
+                
+                // Update GitHub stats card
+                const githubStats = document.getElementById('githubStats');
+                githubStats.innerHTML = `
+                    <div class="card-stats">
+                        <div class="card-stat">
+                            <i class="fas fa-code-branch"></i>
+                            <span>${profile.public_repos} repos</span>
+                        </div>
+                        <div class="card-stat">
+                            <i class="fas fa-users"></i>
+                            <span>${profile.followers} followers</span>
+                        </div>
+                        <div class="card-stat">
+                            <i class="fas fa-user-friends"></i>
+                            <span>${profile.following} following</span>
+                        </div>
                     </div>
                 `;
             } catch (error) {
-                console.error(`Error fetching profile for ${username}:`, error);
+                console.error('Error fetching profile:', error);
+                document.getElementById('heroBio').textContent = "Passionate software developer building innovative solutions";
+                document.getElementById('githubStats').innerHTML = '<p class="card-description">Unable to load GitHub stats</p>';
             }
         }
 
-        async function fetchRepos(username, elementId) {
-            const element = document.getElementById(elementId);
+        async function fetchRepositories(username, containerId) {
             try {
-                const response = await fetch(`https://api.github.com/users/${username}/repos`);
+                const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`);
                 const repos = await response.json();
-
-                element.innerHTML = repos.map(repo => `
-                    <div class="repo-card" onclick="window.open('${repo.html_url}', '_blank')">
-                        <h3>${repo.name}</h3>
-                        <p>${repo.description || "No description available."}</p>
-                        <div class="repo-stats">
-                            <span>⭐ ${repo.stargazers_count}</span>
-                            <span>🍴 ${repo.forks_count}</span>
+                const container = document.getElementById(containerId);
+                
+                container.innerHTML = repos.map(repo => `
+                    <div class="card" onclick="window.open('${repo.html_url}', '_blank')" style="cursor: pointer;">
+                        <div class="card-icon">
+                            <i class="fas fa-folder-open"></i>
                         </div>
-                    </div>`).join('');
+                        <h3 class="card-title">${repo.name}</h3>
+                        <p class="card-description">${repo.description || 'No description available'}</p>
+                        <div class="card-stats">
+                            <div class="card-stat">
+                                <i class="fas fa-star"></i>
+                                <span>${repo.stargazers_count}</span>
+                            </div>
+                            <div class="card-stat">
+                                <i class="fas fa-code-branch"></i>
+                                <span>${repo.forks_count}</span>
+                            </div>
+                            ${repo.language ? `
+                                <div class="card-stat">
+                                    <i class="fas fa-circle" style="color: var(--primary);"></i>
+                                    <span>${repo.language}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `).join('');
             } catch (error) {
                 console.error(`Error fetching repositories for ${username}:`, error);
+                document.getElementById(containerId).innerHTML = '<p class="card-description">Unable to load repositories</p>';
             }
         }
 
-        async function fetchLeetCodeStats(username) {
-            const element = document.getElementById('leetcode');
+        async function fetchLeetCodeStats() {
             try {
-                const response = await fetch(`https://leetcode-stats-api.herokuapp.com/${username}`);
+                const response = await fetch(`https://leetcode-stats-api.herokuapp.com/${config.leetcode}`);
                 const stats = await response.json();
-
-                element.innerHTML = `
-                    <h3>LeetCode Stats</h3>
-                    <p>Total Problems Solved: ${stats.totalSolved}</p>
-                    <p>Easy: ${stats.easySolved}</p>
-                    <p>Medium: ${stats.mediumSolved}</p>
-                    <p>Hard: ${stats.hardSolved}</p>
-                    <p>Rank: ${stats.ranking}</p>
+                
+                const leetcodeCount = document.getElementById('leetcodeCount');
+                const leetcodeStats = document.getElementById('leetcodeStats');
+                
+                leetcodeCount.textContent = stats.totalSolved || '0';
+                
+                leetcodeStats.innerHTML = `
+                    <div class="card-stats">
+                        <div class="card-stat">
+                            <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                            <span>Easy: ${stats.easySolved || 0}</span>
+                        </div>
+                        <div class="card-stat">
+                            <i class="fas fa-check-circle" style="color: var(--warning);"></i>
+                            <span>Medium: ${stats.mediumSolved || 0}</span>
+                        </div>
+                        <div class="card-stat">
+                            <i class="fas fa-check-circle" style="color: var(--error);"></i>
+                            <span>Hard: ${stats.hardSolved || 0}</span>
+                        </div>
+                    </div>
+                    <p class="card-description" style="margin-top: 1rem;">Ranking: ${stats.ranking || 'N/A'}</p>
                 `;
             } catch (error) {
-                console.error(`Error fetching LeetCode stats for ${username}:`, error);
+                console.error('Error fetching LeetCode stats:', error);
+                document.getElementById('leetcodeCount').textContent = '0';
+                document.getElementById('leetcodeStats').innerHTML = '<p class="card-description">Unable to load LeetCode stats</p>';
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchProfile(config.github, 'profile');
-            fetchRepos(config.github, 'repos');
-            fetchRepos(config.sharedGithub, 'shared-repos');
-            fetchLeetCodeStats(config.leetcode);
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
 
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark');
-            }
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-up');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards for animation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize theme
+            initTheme();
+            
+            // Load data
+            fetchProfile();
+            fetchRepositories(config.github, 'projectsGrid');
+            fetchRepositories(config.sharedGithub, 'sharedProjectsGrid');
+            fetchLeetCodeStats();
+            
+            // Setup animations
+            document.querySelectorAll('.card, .section-header').forEach(el => {
+                observer.observe(el);
+            });
         });
     </script>
 </body>
