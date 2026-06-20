@@ -264,7 +264,8 @@ section {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 0;
     align-self: flex-start;
     border: 1px solid rgba(var(--primary-rgb), 0.2);
 }
