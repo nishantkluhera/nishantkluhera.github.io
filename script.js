@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('theme', currentTheme);
         updateThemeIcon(currentTheme);
         updateLeetCodeCardTheme(currentTheme);
+        updateGitHubCardTheme(currentTheme);
     });
     
     function updateThemeIcon(theme) {
@@ -98,42 +99,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetchGithubData(config.githubUser, config.sharedUser);
     updateLeetCodeCardTheme(savedTheme === 'light' ? 'light' : 'dark');
+    updateGitHubCardTheme(savedTheme === 'light' ? 'light' : 'dark');
 });
 
 // Github Fetching
 async function fetchGithubData(username, sharedUsername) {
     const reposContainer = document.getElementById('api-repos-grid');
     const loadingEl = document.getElementById('repos-loading');
-    
-    // Stats elements
-    const personalReposCount = document.getElementById('personal-repos-count');
-    const personalFollowersCount = document.getElementById('personal-followers-count');
-    const sharedReposCount = document.getElementById('shared-repos-count');
 
     try {
-        // Fetch profiles
-        const personalProfilePromise = fetch(`https://api.github.com/users/${username}`).then(r => r.json());
-        const sharedProfilePromise = fetch(`https://api.github.com/users/${sharedUsername}`).then(r => r.json());
-        
         // Fetch repos
         const personalReposPromise = fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=30`).then(r => r.json());
         const sharedReposPromise = fetch(`https://api.github.com/users/${sharedUsername}/repos?sort=updated&per_page=30`).then(r => r.json());
         
-        const [personalProfile, sharedProfile, personalRepos, sharedRepos] = await Promise.all([
-            personalProfilePromise,
-            sharedProfilePromise,
+        const [personalRepos, sharedRepos] = await Promise.all([
             personalReposPromise,
             sharedReposPromise
         ]);
-
-        // Set profile stats
-        if (personalProfile.public_repos !== undefined) {
-            personalReposCount.textContent = personalProfile.public_repos;
-            personalFollowersCount.textContent = personalProfile.followers;
-        }
-        if (sharedProfile.public_repos !== undefined) {
-            sharedReposCount.textContent = sharedProfile.public_repos;
-        }
 
         // Process and filter repos
         let combinedRepos = [];
@@ -218,6 +200,14 @@ function updateLeetCodeCardTheme(theme) {
     const lcImg = document.getElementById('leetcode-stats-img');
     if (lcImg) {
         lcImg.src = `https://github-readme-leetcode-card.romitsagu.com/nishantluhera?theme=${theme === 'light' ? 'light' : 'tokyonight'}&show=graph,recent`;
+    }
+}
+
+// GitHub Stats Card Theme Sync
+function updateGitHubCardTheme(theme) {
+    const ghImg = document.getElementById('github-streak-img');
+    if (ghImg) {
+        ghImg.src = `https://github-readme-streak-stats.herokuapp.com/?user=nishantkluhera&theme=${theme === 'light' ? 'light' : 'tokyonight'}`;
     }
 }
 
