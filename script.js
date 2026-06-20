@@ -217,7 +217,7 @@ function updateGitHubCardTheme(theme) {
 function updateCodeforcesCardTheme(theme) {
     const cfImg = document.getElementById('codeforces-card-img');
     if (cfImg) {
-        cfImg.src = `https://codeforces-stats-vlx.vercel.app/api/card?username=nishantluhera&v2&theme=${theme === 'light' ? 'light' : 'tokyonight'}`;
+        cfImg.src = `https://codeforces-stats-vlx.vercel.app/api/card?username=nishantluhera&v2&theme=${theme === 'light' ? 'default' : 'tokyonight'}`;
     }
 }
 

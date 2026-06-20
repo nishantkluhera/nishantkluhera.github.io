@@ -410,35 +410,38 @@
             </div>
             
             <div class="stats-grid">
-                <!-- GitHub Card -->
-                <div class="card stats-card">
-                    <h3 class="stats-title">
-                        <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                        GitHub Status
-                    </h3>
-                    <div class="stats-content" style="display: flex; justify-content: center; align-items: center; min-height: 180px;">
-                        <img id="github-streak-img" src="https://github-readme-streak-stats.herokuapp.com/?user=nishantkluhera&theme=tokyonight" alt="mystreak" style="width: 100%; max-width: 400px; height: auto; border: none; background: transparent;">
+                <!-- Left Column: GitHub & Codeforces stacked vertically -->
+                <div class="stats-col" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- GitHub Card -->
+                    <div class="card stats-card" style="margin: 0; flex: 1;">
+                        <h3 class="stats-title">
+                            <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                            GitHub Status
+                        </h3>
+                        <div class="stats-content" style="display: flex; justify-content: center; align-items: center; min-height: 180px;">
+                            <img id="github-streak-img" src="https://github-readme-streak-stats.herokuapp.com/?user=nishantkluhera&theme=tokyonight" alt="mystreak" style="width: 100%; max-width: 400px; height: auto; border: none; background: transparent;">
+                        </div>
+                    </div>
+
+                    <!-- Codeforces Card -->
+                    <div class="card stats-card" style="margin: 0; flex: 1;">
+                        <h3 class="stats-title">
+                            <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                            Codeforces Stats
+                        </h3>
+                        <div class="stats-content" style="display: flex; justify-content: center; align-items: center; min-height: 180px;">
+                            <img id="codeforces-card-img" src="https://codeforces-stats-vlx.vercel.app/api/card?username=nishantluhera&v2&theme=tokyonight" alt="Codeforces Stats" style="width: 100%; max-width: 400px; height: auto; border: none; background: transparent;">
+                        </div>
                     </div>
                 </div>
 
-                <!-- Codeforces Card -->
-                <div class="card stats-card">
-                    <h3 class="stats-title">
-                        <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                        Codeforces Stats
-                    </h3>
-                    <div class="stats-content" style="display: flex; justify-content: center; align-items: center; min-height: 180px;">
-                        <img id="codeforces-card-img" src="https://codeforces-stats-vlx.vercel.app/api/card?username=nishantluhera&v2&theme=tokyonight" alt="Codeforces Stats" style="width: 100%; max-width: 400px; height: auto; border: none; background: transparent;">
-                    </div>
-                </div>
-
-                <!-- LeetCode Card -->
-                <div class="card stats-card">
+                <!-- Right Column: LeetCode Card -->
+                <div class="card stats-card" style="margin: 0; display: flex; flex-direction: column; justify-content: space-between;">
                     <h3 class="stats-title">
                         <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                         LeetCode Progress
                     </h3>
-                    <div class="stats-content" style="display: flex; justify-content: center; align-items: center; min-height: 180px;">
+                    <div class="stats-content" style="display: flex; justify-content: center; align-items: center; flex-grow: 1; min-height: 180px;">
                         <img id="leetcode-stats-img" src="https://github-readme-leetcode-card.romitsagu.com/nishantluhera?theme=tokyonight&show=graph,recent" alt="LeetCode Stats" style="width: 100%; max-width: 500px; height: auto; border: none; background: transparent;">
                     </div>
                 </div>
