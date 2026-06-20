@@ -33,7 +33,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 2. Skill Category Filtering
+    // 2. Explore Work Dropdown
+    const exploreBtn = document.getElementById('explore-btn');
+    const exploreDropdown = document.getElementById('explore-dropdown');
+    const dropdownContainer = exploreBtn.parentElement;
+    
+    exploreBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = dropdownContainer.classList.toggle('open');
+        if (isOpen) {
+            exploreDropdown.classList.add('show');
+        } else {
+            exploreDropdown.classList.remove('show');
+        }
+    });
+    
+    document.addEventListener('click', (e) => {
+        if (!dropdownContainer.contains(e.target)) {
+            dropdownContainer.classList.remove('open');
+            exploreDropdown.classList.remove('show');
+        }
+    });
+
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', () => {
+            dropdownContainer.classList.remove('open');
+            exploreDropdown.classList.remove('show');
+        });
+    });
+
+    // 3. Skill Category Filtering
     const filterButtons = document.querySelectorAll('.filter-btn');
     const skillCards = document.querySelectorAll('.skill-category-card');
     
@@ -58,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. Dynamic Repos & Stats Fetching
+    // 4. Dynamic Repos & Stats Fetching
     const config = {
         githubUser: 'nishantkluhera',
         sharedUser: 'projects506',
