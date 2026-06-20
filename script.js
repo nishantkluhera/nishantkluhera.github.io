@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateThemeIcon(currentTheme);
         updateLeetCodeCardTheme(currentTheme);
         updateGitHubCardTheme(currentTheme);
+        updateCodeforcesCardTheme(currentTheme);
     });
     
     function updateThemeIcon(theme) {
@@ -100,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchGithubData(config.githubUser, config.sharedUser);
     updateLeetCodeCardTheme(savedTheme === 'light' ? 'light' : 'dark');
     updateGitHubCardTheme(savedTheme === 'light' ? 'light' : 'dark');
+    updateCodeforcesCardTheme(savedTheme === 'light' ? 'light' : 'dark');
 });
 
 // Github Fetching
@@ -208,6 +210,14 @@ function updateGitHubCardTheme(theme) {
     const ghImg = document.getElementById('github-streak-img');
     if (ghImg) {
         ghImg.src = `https://github-readme-streak-stats.herokuapp.com/?user=nishantkluhera&theme=${theme === 'light' ? 'light' : 'tokyonight'}`;
+    }
+}
+
+// Codeforces Stats Card Theme Sync
+function updateCodeforcesCardTheme(theme) {
+    const cfImg = document.getElementById('codeforces-card-img');
+    if (cfImg) {
+        cfImg.src = `https://codeforces-stats-vlx.vercel.app/api/card?username=nishantluhera&v2&theme=${theme === 'light' ? 'light' : 'tokyonight'}`;
     }
 }
 
