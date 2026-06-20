@@ -1,4 +1,3 @@
-Under slow construction
-# Portfolio Site
 
-Link: https://nishantkluhera.github.io/
+# Portfolio
+https://nishantkluhera.github.io/
