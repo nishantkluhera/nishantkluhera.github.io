@@ -5,10 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeBtn = document.getElementById('theme-toggle');
     const savedTheme = localStorage.getItem('theme');
     
-    // Check system preference if no saved preference
-    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-    
-    if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
+    if (savedTheme === 'light') {
         document.body.classList.add('light-theme');
         updateThemeIcon('light');
     } else {
