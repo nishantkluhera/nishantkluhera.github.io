@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
         localStorage.setItem('theme', currentTheme);
         updateThemeIcon(currentTheme);
+        updateLeetCodeCardTheme(currentTheme);
     });
     
     function updateThemeIcon(theme) {
@@ -96,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     fetchGithubData(config.githubUser, config.sharedUser);
-    fetchLeetCodeData(config.leetcodeUser);
+    updateLeetCodeCardTheme(savedTheme === 'light' ? 'light' : 'dark');
 });
 
 // Github Fetching
@@ -212,62 +213,12 @@ async function fetchGithubData(username, sharedUsername) {
     }
 }
 
-// LeetCode Stats Fetching
-async function fetchLeetCodeData(username) {
-    // Leetcode DOM elements
-    const lcSolved = document.getElementById('lc-solved');
-    const lcRank = document.getElementById('lc-rank');
-    const lcEasyCount = document.getElementById('lc-easy-count');
-    const lcMediumCount = document.getElementById('lc-medium-count');
-    const lcHardCount = document.getElementById('lc-hard-count');
-    
-    // Bar elements
-    const lcEasyBar = document.getElementById('lc-easy-bar');
-    const lcMediumBar = document.getElementById('lc-medium-bar');
-    const lcHardBar = document.getElementById('lc-hard-bar');
-
-    try {
-        const response = await fetch(`https://leetcode-stats-api.herokuapp.com/${username}`);
-        const stats = await response.json();
-
-        if (stats.status === 'success') {
-            lcSolved.textContent = `${stats.totalSolved} / ${stats.totalQuestions}`;
-            lcRank.textContent = stats.ranking.toLocaleString();
-            
-            lcEasyCount.textContent = `${stats.easySolved} / ${stats.totalEasy}`;
-            lcMediumCount.textContent = `${stats.mediumSolved} / ${stats.totalMedium}`;
-            lcHardCount.textContent = `${stats.hardSolved} / ${stats.totalHard}`;
-
-            // Calculate percentage width (with a fallback safety check)
-            const easyPct = Math.min((stats.easySolved / stats.totalEasy) * 100, 100);
-            const mediumPct = Math.min((stats.mediumSolved / stats.totalMedium) * 100, 100);
-            const hardPct = Math.min((stats.hardSolved / stats.totalHard) * 100, 100);
-
-            // Animate progress bars
-            setTimeout(() => {
-                lcEasyBar.style.width = `${easyPct}%`;
-                lcMediumBar.style.width = `${mediumPct}%`;
-                lcHardBar.style.width = `${hardPct}%`;
-            }, 300);
-        } else {
-            setLeetcodeFallback();
-        }
-    } catch (error) {
-        console.error('Error fetching LeetCode stats:', error);
-        setLeetcodeFallback();
+// LeetCode Stats Card Theme Sync
+function updateLeetCodeCardTheme(theme) {
+    const lcImg = document.getElementById('leetcode-stats-img');
+    if (lcImg) {
+        lcImg.src = `https://github-readme-leetcode-card.romitsagu.com/NinePiece2?theme=${theme === 'light' ? 'light' : 'tokyonight'}&show=graph,recent`;
     }
-}
-
-function setLeetcodeFallback() {
-    document.getElementById('lc-solved').textContent = '400+';
-    document.getElementById('lc-rank').textContent = 'Top 10%';
-    document.getElementById('lc-easy-count').textContent = 'Solved';
-    document.getElementById('lc-medium-count').textContent = 'Solved';
-    document.getElementById('lc-hard-count').textContent = 'Solved';
-    
-    document.getElementById('lc-easy-bar').style.width = '70%';
-    document.getElementById('lc-medium-bar').style.width = '60%';
-    document.getElementById('lc-hard-bar').style.width = '30%';
 }
 
 // Utility to format date
