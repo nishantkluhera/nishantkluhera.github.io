@@ -7,6 +7,7 @@
     
     /* Dark Theme (Default) */
     --bg: #09090b;
+    --bg-rgb: 9, 9, 11;
     --bg-grid: rgba(255, 255, 255, 0.02);
     --card-bg: #18181b;
     --card-border: #27272a;
@@ -14,22 +15,22 @@
     --text: #fafafa;
     --text-muted: #a1a1aa;
     
-    --primary: #818cf8;
-    --primary-rgb: 129, 140, 248;
-    --primary-hover: #6366f1;
-    --accent: #c084fc;
-    --accent-rgb: 192, 132, 252;
+    --primary: #10b981; /* Premium Jade Green */
+    --primary-rgb: 16, 185, 129;
+    --primary-hover: #059669;
+    --accent: #14b8a6; /* Supporting Teal Accent */
+    --accent-rgb: 20, 184, 166;
     --success: #34d399;
     
     --badge-bg: #27272a;
     --badge-text: #e4e4e7;
-    --badge-active-bg: rgba(129, 140, 248, 0.15);
-    --badge-active-text: #818cf8;
+    --badge-active-bg: rgba(16, 185, 129, 0.15);
+    --badge-active-text: #10b981;
     
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --shadow-glow: 0 0 25px rgba(129, 140, 248, 0.15);
+    --shadow-glow: 0 0 25px rgba(16, 185, 129, 0.15);
     
     --radius-sm: 0.375rem;
     --radius-md: 0.75rem;
@@ -42,6 +43,7 @@
 .light-theme {
     /* Light Theme */
     --bg: #f8fafc;
+    --bg-rgb: 248, 250, 252;
     --bg-grid: rgba(0, 0, 0, 0.015);
     --card-bg: #ffffff;
     --card-border: #e2e8f0;
@@ -49,19 +51,19 @@
     --text: #0f172a;
     --text-muted: #64748b;
     
-    --primary: #4f46e5;
-    --primary-rgb: 79, 70, 229;
-    --primary-hover: #4338ca;
-    --accent: #9333ea;
-    --accent-rgb: 147, 51, 234;
+    --primary: #059669; /* Rich Jade Green */
+    --primary-rgb: 5, 150, 105;
+    --primary-hover: #047857;
+    --accent: #0d9488;
+    --accent-rgb: 13, 148, 136;
     --success: #059669;
     
     --badge-bg: #f1f5f9;
     --badge-text: #334155;
-    --badge-active-bg: rgba(79, 70, 229, 0.1);
-    --badge-active-text: #4f46e5;
+    --badge-active-bg: rgba(5, 150, 105, 0.1);
+    --badge-active-text: #059669;
     
-    --shadow-glow: 0 0 25px rgba(79, 70, 229, 0.1);
+    --shadow-glow: 0 0 25px rgba(5, 150, 105, 0.1);
 }
 
 * {
@@ -131,7 +133,7 @@ header {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(var(--bg) == #09090b ? 9 : 248, var(--bg) == #09090b ? 9 : 250, var(--bg) == #09090b ? 11 : 252, 0.7);
+    background: rgba(var(--bg-rgb), 0.7);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--card-border);
     transition: var(--transition);
@@ -253,7 +255,7 @@ section {
 }
 
 .hero-tag {
-    background: rgba(129, 140, 248, 0.1);
+    background: rgba(var(--primary-rgb), 0.1);
     color: var(--primary);
     padding: 0.35rem 1rem;
     border-radius: var(--radius-full);
@@ -264,7 +266,7 @@ section {
     gap: 0.5rem;
     margin-bottom: 1.5rem;
     align-self: flex-start;
-    border: 1px solid rgba(129, 140, 248, 0.2);
+    border: 1px solid rgba(var(--primary-rgb), 0.2);
 }
 
 .hero-tag .pulse {
@@ -901,7 +903,7 @@ section {
 }
 
 .repo-badge {
-    background: rgba(129, 140, 248, 0.1);
+    background: rgba(var(--primary-rgb), 0.1);
     color: var(--primary);
     font-size: 0.75rem;
     font-weight: 600;
