@@ -217,7 +217,7 @@ async function fetchGithubData(username, sharedUsername) {
 function updateLeetCodeCardTheme(theme) {
     const lcImg = document.getElementById('leetcode-stats-img');
     if (lcImg) {
-        lcImg.src = `https://github-readme-leetcode-card.romitsagu.com/NinePiece2?theme=${theme === 'light' ? 'light' : 'tokyonight'}&show=graph,recent`;
+        lcImg.src = `https://github-readme-leetcode-card.romitsagu.com/nishantluhera?theme=${theme === 'light' ? 'light' : 'tokyonight'}&show=graph,recent`;
     }
 }
 
