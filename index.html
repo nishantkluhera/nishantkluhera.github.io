@@ -6,12 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nishant Luhera | Portfolio</title>
 
+    <!-- Apply saved theme before first paint, and gate scroll-reveal so content
+         is visible if JS is disabled. -->
+    <script>
+        (function () {
+            var d = document.documentElement;
+            d.classList.add('js');
+            try {
+                if (localStorage.getItem('theme') === 'light') {
+                    d.classList.add('light-theme');
+                }
+            } catch (e) {}
+            // Failsafe: if the reveal observer never initializes, show everything.
+            window.addEventListener('load', function () {
+                setTimeout(function () {
+                    if (!window.__revealReady) {
+                        var els = document.querySelectorAll('.reveal');
+                        for (var i = 0; i < els.length; i++) els[i].classList.add('is-visible');
+                    }
+                }, 1500);
+            });
+        })();
+    </script>
+
     <!-- Meta tags for SEO -->
     <meta name="description" content="Portfolio of Nishant Luhera, Software Engineer. Specialist in custom LLM engines, high-performance developer tools, and collaborative web platforms.">
     <meta name="keywords" content="Nishant Luhera, Software Engineer, AutoMarket, AtlasInfer, CodeQuorum, LLM quantization, PyTorch, Triton, CUDA, Web Dev, Gurgaon, Bangalore">
     <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#09090b">
     <link rel="canonical" href="https://nishantkluhera.github.io/">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2225%22 fill=%22%2310b981%22/><text y=%2268%22 x=%2250%22 font-size=%2255%22 font-family=%22system-ui,sans-serif%22 font-weight=%22bold%22 fill=%22%2309090b%22 text-anchor=%22middle%22>NL</text></svg>">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
 
     <!-- Open Graph / Facebook / LinkedIn -->
     <meta property="og:type" content="website">
@@ -27,14 +53,48 @@
     <meta name="twitter:description" content="I build high-performance developer tools, custom LLM inference engines, and scalable AI platforms.">
     <meta name="twitter:image" content="https://nishantkluhera.github.io/og-image.png">
 
+    <!-- Structured data for search engines (Person schema) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Nishant Luhera",
+        "url": "https://nishantkluhera.github.io/",
+        "image": "https://nishantkluhera.github.io/og-image.png",
+        "jobTitle": "Software Engineer",
+        "email": "mailto:nishantkluhera@gmail.com",
+        "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "BML Munjal University"
+        },
+        "knowsAbout": [
+            "LLM Inference", "Model Quantization", "PyTorch", "Triton", "CUDA",
+            "TypeScript", "Distributed Systems", "Developer Tools"
+        ],
+        "sameAs": [
+            "https://github.com/nishantkluhera",
+            "https://linkedin.com/in/nishantkluhera",
+            "https://twitter.com/luheranishant"
+        ]
+    }
+    </script>
+
+    <!-- Fonts (preconnect + non-blocking load, faster than CSS @import) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap">
+
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+    <a href="#hero" class="skip-link">Skip to content</a>
+
     <!-- Glowing backdrop orbs -->
-    <div class="glowing-orbs">
+    <div class="glowing-orbs" aria-hidden="true">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
     </div>
@@ -42,23 +102,36 @@
     <!-- Navigation Header -->
     <header>
         <div class="container nav-container">
-            <a href="#" class="logo">NL</a>
-            <nav class="nav-links">
+            <a href="#hero" class="logo" aria-label="Back to top">NL</a>
+            <nav class="nav-links" id="nav-links">
+                <a href="#about" class="nav-link">About</a>
                 <a href="#experience" class="nav-link">Experience</a>
                 <a href="#projects" class="nav-link">Projects</a>
                 <a href="#skills" class="nav-link">Skills</a>
                 <a href="#education" class="nav-link">Education</a>
                 <a href="#stats" class="nav-link">Stats</a>
+                <a href="#contact" class="nav-link">Contact</a>
             </nav>
-            <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
-                <!-- SVG Icon loaded dynamically in script.js -->
-            </button>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
+                    <!-- SVG Icon loaded dynamically in script.js -->
+                </button>
+                <button id="nav-toggle" class="nav-toggle" aria-label="Open menu" aria-expanded="false"
+                    aria-controls="nav-links">
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
         </div>
     </header>
 
     <main class="container">
         <!-- Hero Section -->
-        <section id="hero" class="hero">
+        <section id="hero" class="hero reveal">
             <h1>Hi, I'm <span>Nishant Luhera</span></h1>
             <p class="hero-subtitle">Software Engineer</p>
             <p class="hero-desc">
@@ -96,6 +169,14 @@
                         </path>
                     </svg>
                     GitHub
+                </a>
+                <a href="https://twitter.com/luheranishant" target="_blank" rel="noopener" class="contact-item">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
+                        </path>
+                    </svg>
+                    Twitter
                 </a>
             </div>
 
@@ -149,8 +230,25 @@
             </div>
         </section>
 
+        <!-- About Section -->
+        <section id="about" class="reveal">
+            <div class="section-header">
+                <span class="section-tag">Who I Am</span>
+                <h2 class="section-title">About</h2>
+            </div>
+            <div class="about-content">
+                <p>I'm a software engineer drawn to the systems layer of AI — the quantization kernels, inference
+                    engines, and backends that take models from a notebook into production. I gravitate toward problems
+                    where correctness and performance both matter and there's no library to paper over the hard part.</p>
+                <p>Recently I built an AI-driven WhatsApp lead platform end-to-end as a founding engineer, shipped a paid
+                    image-inpainting pipeline for Livepeer's decentralized GPU network, and wrote a from-scratch LLM
+                    quantization engine that matches bitsandbytes on INT8 and beats it on NF4 perplexity. I graduate in
+                    2026 and I'm open to roles across India, with relocation to Singapore, Japan, or the Nordics.</p>
+            </div>
+        </section>
+
         <!-- Experience Section -->
-        <section id="experience">
+        <section id="experience" class="reveal">
             <div class="section-header">
                 <span class="section-tag">Career History</span>
                 <h2 class="section-title">Experience</h2>
@@ -296,7 +394,7 @@
         </section>
 
         <!-- Projects Section -->
-        <section id="projects">
+        <section id="projects" class="reveal">
             <div class="section-header">
                 <span class="section-tag">Featured Works</span>
                 <h2 class="section-title">Projects</h2>
@@ -308,8 +406,8 @@
                     <div class="project-header">
                         <h3 class="project-title">AtlasInfer</h3>
                         <div class="project-links">
-                            <a href="https://github.com/nishantkluhera" target="_blank" rel="noopener"
-                                class="project-link" aria-label="GitHub Repository">
+                            <a href="https://github.com/nishantkluhera/AtlasInfer" target="_blank" rel="noopener"
+                                class="project-link" aria-label="AtlasInfer on GitHub">
                                 <svg viewBox="0 0 24 24">
                                     <path
                                         d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
@@ -341,8 +439,8 @@
                     <div class="project-header">
                         <h3 class="project-title">CodeQuorum</h3>
                         <div class="project-links">
-                            <a href="https://github.com/nishantkluhera" target="_blank" rel="noopener"
-                                class="project-link" aria-label="GitHub Repository">
+                            <a href="https://github.com/nishantkluhera/CodeQuorum" target="_blank" rel="noopener"
+                                class="project-link" aria-label="CodeQuorum on GitHub">
                                 <svg viewBox="0 0 24 24">
                                     <path
                                         d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
@@ -373,8 +471,8 @@
                     <div class="project-header">
                         <h3 class="project-title">ECG Analysis Suite</h3>
                         <div class="project-links">
-                            <a href="https://github.com/nishantkluhera" target="_blank" rel="noopener"
-                                class="project-link" aria-label="GitHub Repository">
+                            <a href="https://github.com/nishantkluhera/ECG-Heartbeat-Classification" target="_blank" rel="noopener"
+                                class="project-link" aria-label="ECG Analysis Suite on GitHub">
                                 <svg viewBox="0 0 24 24">
                                     <path
                                         d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
@@ -402,7 +500,7 @@
         </section>
 
         <!-- Skills Section -->
-        <section id="skills">
+        <section id="skills" class="reveal">
             <div class="section-header">
                 <span class="section-tag">Technical Competencies</span>
                 <h2 class="section-title">Skills</h2>
@@ -414,10 +512,9 @@
                     <button class="filter-btn active" data-category="all">All Skills</button>
                     <button class="filter-btn" data-category="languages">Languages</button>
                     <button class="filter-btn" data-category="ai-ml">AI / ML</button>
-                    <button class="filter-btn" data-category="backend">Backend & Frameworks</button>
+                    <button class="filter-btn" data-category="infrastructure">Infrastructure</button>
+                    <button class="filter-btn" data-category="backend">Backend</button>
                     <button class="filter-btn" data-category="frontend">Frontend</button>
-                    <button class="filter-btn" data-category="systems">Systems & Architecture</button>
-                    <button class="filter-btn" data-category="methodologies">Methodologies</button>
                 </div>
 
                 <div class="skills-grid">
@@ -439,59 +536,52 @@
                         <div class="skill-list">
                             <span class="skill-badge">PyTorch</span>
                             <span class="skill-badge">TensorFlow</span>
-                            <span class="skill-badge">Neural Networks</span>
-                            <span class="skill-badge">LLM APIs</span>
-                            <span class="skill-badge">Vector Databases</span>
-                            <span class="skill-badge">Kernels</span>
+                            <span class="skill-badge">CUDA</span>
+                            <span class="skill-badge">Triton</span>
+                            <span class="skill-badge">HuggingFace Diffusers</span>
+                            <span class="skill-badge">LLM APIs (Anthropic, DeepSeek)</span>
+                            <span class="skill-badge">Quantization (INT8/NF4)</span>
+                            <span class="skill-badge">scikit-learn</span>
+                            <span class="skill-badge">OpenCV</span>
                         </div>
                     </div>
 
-                    <!-- Backend & Frameworks -->
+                    <!-- Infrastructure -->
+                    <div class="card skill-category-card" data-category="infrastructure">
+                        <h3 class="skill-category-title">Infrastructure</h3>
+                        <div class="skill-list">
+                            <span class="skill-badge">Linux/Unix</span>
+                            <span class="skill-badge">Docker</span>
+                            <span class="skill-badge">Git</span>
+                            <span class="skill-badge">CI/CD</span>
+                            <span class="skill-badge">SQLite (WAL)</span>
+                            <span class="skill-badge">Cloud Computing</span>
+                            <span class="skill-badge">Multi-tenant Architecture</span>
+                        </div>
+                    </div>
+
+                    <!-- Backend -->
                     <div class="card skill-category-card" data-category="backend">
-                        <h3 class="skill-category-title">Backend & Frameworks</h3>
+                        <h3 class="skill-category-title">Backend</h3>
                         <div class="skill-list">
                             <span class="skill-badge">Node.js</span>
                             <span class="skill-badge">Express.js</span>
+                            <span class="skill-badge">FastAPI</span>
                             <span class="skill-badge">Django</span>
                             <span class="skill-badge">Flask</span>
                             <span class="skill-badge">REST APIs</span>
-                            <span class="skill-badge">Spring Boot</span>
+                            <span class="skill-badge">WebSockets / Socket.IO</span>
                         </div>
                     </div>
 
                     <!-- Frontend -->
                     <div class="card skill-category-card" data-category="frontend">
-                        <h3 class="skill-category-title">Frontend Engineering</h3>
+                        <h3 class="skill-category-title">Frontend</h3>
                         <div class="skill-list">
                             <span class="skill-badge">React.js</span>
                             <span class="skill-badge">Next.js</span>
-                            <span class="skill-badge">HTML5/CSS3</span>
                             <span class="skill-badge">Tailwind CSS</span>
-                        </div>
-                    </div>
-
-                    <!-- Systems & Architecture -->
-                    <div class="card skill-category-card" data-category="systems">
-                        <h3 class="skill-category-title">Systems & Architecture</h3>
-                        <div class="skill-list">
-                            <span class="skill-badge">Linux/Unix</span>
-                            <span class="skill-badge">Cloud Computing</span>
-                            <span class="skill-badge">Docker</span>
-                            <span class="skill-badge">Operating Systems</span>
-                            <span class="skill-badge">Compilers</span>
-                            <span class="skill-badge">Cache Memory</span>
-                            <span class="skill-badge">Database Normalization</span>
-                        </div>
-                    </div>
-
-                    <!-- Methodologies -->
-                    <div class="card skill-category-card" data-category="methodologies">
-                        <h3 class="skill-category-title">Methodologies</h3>
-                        <div class="skill-list">
-                            <span class="skill-badge">Agile/Scrum</span>
-                            <span class="skill-badge">Git</span>
-                            <span class="skill-badge">CI/CD</span>
-                            <span class="skill-badge">TDD (Test-Driven)</span>
+                            <span class="skill-badge">HTML5/CSS3</span>
                         </div>
                     </div>
                 </div>
@@ -499,7 +589,7 @@
         </section>
 
         <!-- Education Section -->
-        <section id="education">
+        <section id="education" class="reveal">
             <div class="section-header">
                 <span class="section-tag">Academic Background</span>
                 <h2 class="section-title">Education</h2>
@@ -528,7 +618,7 @@
         </section>
 
         <!-- Stats & Live Projects Section -->
-        <section id="stats">
+        <section id="stats" class="reveal">
             <div class="section-header">
                 <span class="section-tag">GitHub & LeetCode Metrics</span>
                 <h2 class="section-title">Live Statistics</h2>
@@ -551,7 +641,9 @@
                             style="display: flex; justify-content: center; align-items: center; min-height: 180px;">
                             <img id="github-streak-img"
                                 src="https://github-readme-streak-stats.herokuapp.com/?user=nishantkluhera&theme=tokyonight"
-                                alt="mystreak"
+                                alt="Nishant Luhera's GitHub contribution streak" loading="lazy"
+                                data-fallback="https://github.com/nishantkluhera"
+                                data-fallback-label="View GitHub profile"
                                 style="width: 100%; max-width: 400px; height: auto; border: none; background: transparent;">
                         </div>
                     </div>
@@ -570,7 +662,9 @@
                             style="display: flex; justify-content: center; align-items: center; min-height: 180px;">
                             <img id="codeforces-card-img"
                                 src="https://codeforces-stats-vlx.vercel.app/api/card?username=nishantluhera&v2&theme=tokyonight"
-                                alt="Codeforces Stats"
+                                alt="Nishant Luhera's Codeforces statistics" loading="lazy"
+                                data-fallback="https://codeforces.com/profile/nishantluhera"
+                                data-fallback-label="View Codeforces profile"
                                 style="width: 100%; max-width: 400px; height: auto; border: none; background: transparent;">
                         </div>
                     </div>
@@ -589,9 +683,56 @@
                         style="display: flex; justify-content: center; align-items: center; flex-grow: 1; min-height: 180px;">
                         <img id="leetcode-stats-img"
                             src="https://github-readme-leetcode-card.romitsagu.com/nishantluhera?theme=tokyonight&show=graph,recent"
-                            alt="LeetCode Stats"
+                            alt="Nishant Luhera's LeetCode progress" loading="lazy"
+                            data-fallback="https://leetcode.com/u/nishantluhera/"
+                            data-fallback-label="View LeetCode profile"
                             style="width: 100%; max-width: 500px; height: auto; border: none; background: transparent;">
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="reveal">
+            <div class="contact-cta">
+                <span class="section-tag">Get In Touch</span>
+                <h2 class="section-title">Let's build something</h2>
+                <p>I'm looking for software engineering roles and hard problems in AI systems, infrastructure, and
+                    developer tools. If that sounds like your team &mdash; or you just want to talk shop &mdash; my inbox
+                    is open.</p>
+                <a href="mailto:nishantkluhera@gmail.com" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"
+                        style="margin-right: 4px;">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    Email Me
+                </a>
+                <div class="contact-socials">
+                    <a href="https://linkedin.com/in/nishantkluhera" target="_blank" rel="noopener" class="contact-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                            <rect x="2" y="9" width="4" height="12"></rect>
+                            <circle cx="4" cy="4" r="2"></circle>
+                        </svg>
+                        LinkedIn
+                    </a>
+                    <a href="https://github.com/nishantkluhera" target="_blank" rel="noopener" class="contact-item">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                            </path>
+                        </svg>
+                        GitHub
+                    </a>
+                    <a href="https://twitter.com/luheranishant" target="_blank" rel="noopener" class="contact-item">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
+                            </path>
+                        </svg>
+                        Twitter
+                    </a>
                 </div>
             </div>
         </section>
@@ -600,7 +741,7 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2026 Nishant Luhera. Yes AI made it coz its faster & easier to maintain.</p>
+            <p>&copy; 2026 Nishant Luhera. Yes, AI made it &mdash; it&rsquo;s faster and easier to maintain.</p>
         </div>
     </footer>
 

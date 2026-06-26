@@ -2,19 +2,17 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Theme Management
+    // The .light-theme class is applied to <html> by an inline script in <head>
+    // (before first paint) to avoid a flash of the wrong theme.
     const themeBtn = document.getElementById('theme-toggle');
+    const root = document.documentElement;
     const savedTheme = localStorage.getItem('theme');
-    
-    if (savedTheme === 'light') {
-        document.body.classList.add('light-theme');
-        updateThemeIcon('light');
-    } else {
-        updateThemeIcon('dark');
-    }
-    
+
+    updateThemeIcon(root.classList.contains('light-theme') ? 'light' : 'dark');
+
     themeBtn.addEventListener('click', () => {
-        document.body.classList.toggle('light-theme');
-        const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+        root.classList.toggle('light-theme');
+        const currentTheme = root.classList.contains('light-theme') ? 'light' : 'dark';
         localStorage.setItem('theme', currentTheme);
         updateThemeIcon(currentTheme);
         updateLeetCodeCardTheme(currentTheme);
@@ -92,9 +90,109 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 4. Stats Theme Sync
-    updateLeetCodeCardTheme(savedTheme === 'light' ? 'light' : 'dark');
-    updateGitHubCardTheme(savedTheme === 'light' ? 'light' : 'dark');
-    updateCodeforcesCardTheme(savedTheme === 'light' ? 'light' : 'dark');
+    const initialTheme = savedTheme === 'light' ? 'light' : 'dark';
+    updateLeetCodeCardTheme(initialTheme);
+    updateGitHubCardTheme(initialTheme);
+    updateCodeforcesCardTheme(initialTheme);
+
+    // 5. Accessibility: hide decorative inline SVG icons from screen readers.
+    // Every icon here is paired with visible text or an aria-label on its parent.
+    document.querySelectorAll('svg:not([aria-hidden])').forEach(svg => {
+        svg.setAttribute('aria-hidden', 'true');
+        svg.setAttribute('focusable', 'false');
+    });
+
+    // 6. Graceful fallback for third-party stat cards (free services that can be
+    // down or rate-limited): swap a broken image for a link to the profile.
+    document.querySelectorAll('img[data-fallback]').forEach(img => {
+        img.addEventListener('error', () => {
+            if (img.dataset.failed) return; // guard against re-entrancy
+            img.dataset.failed = 'true';
+            const link = document.createElement('a');
+            link.href = img.dataset.fallback;
+            link.target = '_blank';
+            link.rel = 'noopener';
+            link.className = 'stats-fallback';
+            link.textContent = (img.dataset.fallbackLabel || 'View profile') + ' →';
+            img.replaceWith(link);
+        });
+    });
+
+    // 7. Mobile navigation toggle
+    const navToggle = document.getElementById('nav-toggle');
+    const navMenu = document.getElementById('nav-links');
+    if (navToggle && navMenu) {
+        const closeNav = () => {
+            navMenu.classList.remove('open');
+            navToggle.setAttribute('aria-expanded', 'false');
+            navToggle.setAttribute('aria-label', 'Open menu');
+        };
+        navToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = navMenu.classList.toggle('open');
+            navToggle.setAttribute('aria-expanded', String(isOpen));
+            navToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+        });
+        navMenu.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', closeNav);
+        });
+        document.addEventListener('click', (e) => {
+            if (navMenu.classList.contains('open') &&
+                !navMenu.contains(e.target) && !navToggle.contains(e.target)) {
+                closeNav();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeNav();
+        });
+    }
+
+    // 8. Scroll-reveal for sections
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealAll = () => revealEls.forEach(el => el.classList.add('is-visible'));
+    if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
+        revealEls.forEach(el => revealObserver.observe(el));
+        // Failsafe: if the observer never reveals the first section (e.g. it
+        // isn't firing in this environment), reveal everything so content is
+        // never stuck hidden. Runs regardless of the load event.
+        setTimeout(() => {
+            if (revealEls.length && !revealEls[0].classList.contains('is-visible')) {
+                revealAll();
+            }
+        }, 1500);
+    } else {
+        revealAll();
+    }
+    window.__revealReady = true;
+
+    // 9. Active nav link on scroll (scrollspy)
+    const spySections = document.querySelectorAll('main section[id]');
+    const navLinkByHash = {};
+    document.querySelectorAll('.nav-link').forEach(link => {
+        navLinkByHash[link.getAttribute('href')] = link;
+    });
+    if ('IntersectionObserver' in window && spySections.length) {
+        const spy = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const link = navLinkByHash['#' + entry.target.id];
+                    if (link) {
+                        Object.keys(navLinkByHash).forEach(k => navLinkByHash[k].classList.remove('active'));
+                        link.classList.add('active');
+                    }
+                }
+            });
+        }, { rootMargin: '-45% 0px -45% 0px' });
+        spySections.forEach(s => spy.observe(s));
+    }
 });
 
 // LeetCode Stats Card Theme Sync

@@ -1,5 +1,6 @@
 /* Premium Developer Portfolio Styling */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap');
+/* Fonts are loaded via <link rel="preconnect"> + <link rel="stylesheet"> in
+   index.html, which is faster than a render-blocking CSS @import. */
 
 :root {
     --font-heading: 'Outfit', sans-serif;
@@ -70,7 +71,52 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
     scroll-behavior: smooth;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    /* The mobile nav toggles via opacity/visibility; a near-zero transition can
+       leave it stuck closed, so disable the transition entirely here. */
+    .nav-links {
+        transition: none !important;
+    }
+}
+
+/* Skip-to-content link (visible only when focused via keyboard) */
+.skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -3rem;
+    z-index: 200;
+    background: var(--primary);
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: 1rem;
 }
 
 body {
@@ -152,6 +198,7 @@ header {
     font-weight: 800;
     background: linear-gradient(to right, var(--primary), var(--accent));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-decoration: none;
 }
@@ -198,6 +245,34 @@ header {
     fill: none;
     stroke: currentColor;
     stroke-width: 2;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Hamburger (mobile only) */
+.nav-toggle {
+    display: none;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text);
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.nav-toggle:hover {
+    border-color: var(--primary);
+}
+
+.nav-toggle svg {
+    display: block;
 }
 
 /* Sections */
@@ -282,6 +357,7 @@ section {
 .hero h1 span {
     background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -759,6 +835,23 @@ section {
     gap: 1rem;
 }
 
+/* Shown when a third-party stat card fails to load */
+.stats-fallback {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    padding: 1rem;
+    border: 1px dashed var(--card-border);
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+}
+
+.stats-fallback:hover {
+    border-color: var(--primary);
+    background: var(--badge-active-bg);
+}
+
 .stat-row {
     display: flex;
     justify-content: space-between;
@@ -905,6 +998,64 @@ section {
     border-radius: var(--radius-full);
 }
 
+/* About Section */
+.about-content {
+    max-width: 760px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    font-size: 1.05rem;
+    color: var(--text-muted);
+}
+
+/* Contact Section */
+.contact-cta {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.contact-cta p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+}
+
+.contact-cta .btn-primary {
+    margin-top: 0.25rem;
+}
+
+.contact-socials {
+    display: flex;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+/* Scroll reveal (only active when JS is enabled; respects reduced motion) */
+.js section.reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.js section.reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .js section.reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
 /* Footer */
 footer {
     padding: 3rem 0;
@@ -933,8 +1084,37 @@ footer {
         padding: 3.5rem 0 2rem 0;
     }
     
+    .nav-toggle {
+        display: flex;
+    }
+
     .nav-links {
-        display: none; /* simple mobile portfolio, header toggle is kept */
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.25rem;
+        background: rgba(var(--bg-rgb), 0.97);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--card-border);
+        padding: 0.75rem 2rem 1.25rem;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    }
+
+    .nav-links.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .nav-link {
+        padding: 0.6rem 0;
+        font-size: 1.05rem;
     }
     
     .timeline::before {
@@ -1021,4 +1201,66 @@ footer {
 /* Rotate dropdown arrow when open */
 .dropdown-container.open button svg {
     transform: rotate(180deg);
+}
+
+/* Visible focus ring for keyboard users only (not on mouse click) */
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Print / "Save as PDF" — clean light output, drop interactive chrome */
+@media print {
+    :root,
+    .light-theme {
+        --bg: #ffffff;
+        --bg-rgb: 255, 255, 255;
+        --bg-grid: transparent;
+        --card-bg: #ffffff;
+        --card-border: #cccccc;
+        --card-hover-border: #cccccc;
+        --text: #000000;
+        --text-muted: #333333;
+        --badge-bg: #f1f1f1;
+        --badge-text: #222222;
+    }
+
+    body {
+        background-image: none !important;
+    }
+
+    .glowing-orbs,
+    header,
+    .nav-toggle,
+    .theme-btn,
+    .hero-actions,
+    #stats,
+    .skip-link,
+    footer {
+        display: none !important;
+    }
+
+    section {
+        border: none !important;
+        padding: 1.25rem 0 !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .card,
+    .timeline-content,
+    .education-card {
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    a {
+        text-decoration: underline;
+    }
 }

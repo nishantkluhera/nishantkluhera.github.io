@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Page Not Found | Nishant Luhera</title>
+    <meta name="robots" content="noindex">
+
+    <!-- Apply saved theme before first paint -->
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'light') {
+                    document.documentElement.classList.add('light-theme');
+                }
+            } catch (e) {}
+        })();
+    </script>
+
+    <meta name="theme-color" content="#09090b">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2225%22 fill=%22%2310b981%22/><text y=%2268%22 x=%2250%22 font-size=%2255%22 font-family=%22system-ui,sans-serif%22 font-weight=%22bold%22 fill=%22%2309090b%22 text-anchor=%22middle%22>NL</text></svg>">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap">
+
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        .notfound {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 1.25rem;
+            padding: 2rem;
+        }
+
+        .notfound-code {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: clamp(5rem, 18vw, 10rem);
+            line-height: 1;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .notfound h1 {
+            font-family: var(--font-heading);
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .notfound p {
+            color: var(--text-muted);
+            max-width: 440px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Glowing backdrop orbs -->
+    <div class="glowing-orbs" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <main class="notfound">
+        <div class="notfound-code">404</div>
+        <h1>Page not found</h1>
+        <p>This page took a wrong turn. The link may be broken or the page may have moved.</p>
+        <a href="/" class="btn btn-primary">Back to home</a>
+    </main>
+
+</body>
+
+</html>
