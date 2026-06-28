@@ -17,9 +17,11 @@
                     d.classList.add('light-theme');
                 }
             } catch (e) {}
-            // Failsafe: if the reveal observer never initializes, show everything.
+            // Failsafe: if the main script never initializes, still resolve the
+            // hero entrance and reveal all content so nothing stays hidden.
             window.addEventListener('load', function () {
                 setTimeout(function () {
+                    d.classList.add('ready');
                     if (!window.__revealReady) {
                         var els = document.querySelectorAll('.reveal');
                         for (var i = 0; i < els.length; i++) els[i].classList.add('is-visible');
@@ -93,11 +95,22 @@
 
     <a href="#hero" class="skip-link">Skip to content</a>
 
+    <!-- Scroll progress indicator -->
+    <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
     <!-- Glowing backdrop orbs -->
     <div class="glowing-orbs" aria-hidden="true">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
     </div>
+
+    <!-- Film grain texture overlay -->
+    <div class="grain" aria-hidden="true"></div>
+
+    <!-- Custom cursor (instant dot + trailing ring; fine-pointer + motion only) -->
+    <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+    <div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
 
     <!-- Navigation Header -->
     <header>
@@ -131,7 +144,7 @@
 
     <main class="container">
         <!-- Hero Section -->
-        <section id="hero" class="hero reveal">
+        <section id="hero" class="hero">
             <h1>Hi, I'm <span>Nishant Luhera</span></h1>
             <p class="hero-subtitle">Software Engineer</p>
             <p class="hero-desc">

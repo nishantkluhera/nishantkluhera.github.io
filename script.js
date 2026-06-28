@@ -193,6 +193,136 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { rootMargin: '-45% 0px -45% 0px' });
         spySections.forEach(s => spy.observe(s));
     }
+
+    // 10. Hero entrance cascade — trigger after first paint
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => document.documentElement.classList.add('ready'));
+    });
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // 11. Scroll progress bar
+    const progress = document.getElementById('scroll-progress');
+    if (progress) {
+        let ticking = false;
+        const updateProgress = () => {
+            const h = document.documentElement;
+            const max = h.scrollHeight - h.clientHeight;
+            const pct = max > 0 ? h.scrollTop / max : 0;
+            progress.style.transform = `scaleX(${pct})`;
+            ticking = false;
+        };
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                ticking = true;
+                requestAnimationFrame(updateProgress);
+            }
+        }, { passive: true });
+        updateProgress();
+    }
+
+    // The pointer-driven flourishes below are motion; skip when reduced motion
+    // is requested or on touch-only devices (no real cursor to track).
+    const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+    if (!reduceMotion && hasFinePointer) {
+
+        // 12. Cursor spotlight on cards
+        const spotlightCards = document.querySelectorAll('.card, .timeline-content');
+        spotlightCards.forEach(card => {
+            card.addEventListener('pointermove', (e) => {
+                const rect = card.getBoundingClientRect();
+                card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+                card.style.setProperty('--my', `${e.clientY - rect.top}px`);
+            });
+        });
+
+        // 13. Magnetic primary buttons
+        const magnets = document.querySelectorAll('.btn-primary');
+        const STRENGTH = 0.3;
+        const RADIUS = 90;
+        magnets.forEach(btn => {
+            btn.addEventListener('pointermove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+                const dx = e.clientX - cx;
+                const dy = e.clientY - cy;
+                if (Math.hypot(dx, dy) < rect.width / 2 + RADIUS) {
+                    btn.style.transform = `translate(${dx * STRENGTH}px, ${dy * STRENGTH}px)`;
+                }
+            });
+            btn.addEventListener('pointerleave', () => {
+                btn.style.transform = '';
+            });
+        });
+
+        // 14. Custom cursor — instant dot + smoothly-trailing ring.
+        // The dot is positioned synchronously on pointermove (no easing) so it
+        // tracks 1:1 and never feels laggy; only the ring trails, by design.
+        const dot = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+        if (dot && ring) {
+            document.documentElement.classList.add('has-custom-cursor');
+
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            let ringX = mouseX;
+            let ringY = mouseY;
+            let first = true;
+            let shown = false;
+
+            window.addEventListener('pointermove', (e) => {
+                if (e.pointerType && e.pointerType !== 'mouse') return; // ignore touch/pen
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                // Dot is instant — set transform right here, no lerp.
+                dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+                if (first) {
+                    ringX = mouseX;
+                    ringY = mouseY;
+                    ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+                    first = false;
+                }
+                if (!shown) {
+                    shown = true;
+                    dot.classList.add('is-active');
+                    ring.classList.add('is-active');
+                }
+            }, { passive: true });
+
+            // Ring trails with a light lerp (the only eased element).
+            const ringLoop = () => {
+                ringX += (mouseX - ringX) * 0.22;
+                ringY += (mouseY - ringY) * 0.22;
+                ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+                requestAnimationFrame(ringLoop);
+            };
+            requestAnimationFrame(ringLoop);
+
+            // Hide when the pointer leaves the window, show on return.
+            document.addEventListener('mouseleave', () => {
+                dot.classList.remove('is-active');
+                ring.classList.remove('is-active');
+                shown = false;
+            });
+            document.addEventListener('mouseenter', () => {
+                dot.classList.add('is-active');
+                ring.classList.add('is-active');
+                shown = true;
+            });
+
+            // Ring grows over interactive targets.
+            const interactive = 'a, button, .filter-btn, .card, .timeline-content, [role="button"]';
+            document.querySelectorAll(interactive).forEach(el => {
+                el.addEventListener('pointerenter', () => ring.classList.add('is-hover'));
+                el.addEventListener('pointerleave', () => ring.classList.remove('is-hover'));
+            });
+
+            // Tighten on press.
+            window.addEventListener('pointerdown', () => ring.classList.add('is-down'));
+            window.addEventListener('pointerup', () => ring.classList.remove('is-down'));
+        }
+    }
 });
 
 // LeetCode Stats Card Theme Sync

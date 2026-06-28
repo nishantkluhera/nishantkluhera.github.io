@@ -39,6 +39,14 @@
     --radius-full: 9999px;
     
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Motion language — refined easings for a high-end feel */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+    --shadow-premium: 0 24px 50px -12px rgba(0, 0, 0, 0.55);
+    --shadow-premium-glow: 0 24px 60px -18px rgba(var(--primary-rgb), 0.35);
 }
 
 .light-theme {
@@ -149,23 +157,65 @@ body {
     border-radius: var(--radius-full);
     filter: blur(80px);
     opacity: 0.15;
-    transition: var(--transition);
+    will-change: transform, opacity;
 }
 
 .orb-1 {
-    width: 300px;
-    height: 300px;
+    width: 340px;
+    height: 340px;
     background: var(--primary);
-    top: -50px;
-    right: 10%;
+    top: -60px;
+    right: 8%;
+    animation: drift-1 26s var(--ease-in-out-quart) infinite;
 }
 
 .orb-2 {
-    width: 400px;
-    height: 400px;
+    width: 440px;
+    height: 440px;
     background: var(--accent);
-    bottom: 10%;
-    left: -100px;
+    bottom: 6%;
+    left: -120px;
+    animation: drift-2 32s var(--ease-in-out-quart) infinite;
+}
+
+/* A third, slow accent glow for depth */
+.orb-3 {
+    width: 300px;
+    height: 300px;
+    background: var(--success);
+    top: 40%;
+    left: 45%;
+    opacity: 0.08;
+    animation: drift-3 38s var(--ease-in-out-quart) infinite;
+}
+
+@keyframes drift-1 {
+    0%   { transform: translate(0, 0) scale(1); opacity: 0.15; }
+    50%  { transform: translate(-80px, 120px) scale(1.25); opacity: 0.22; }
+    100% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+}
+
+@keyframes drift-2 {
+    0%   { transform: translate(0, 0) scale(1); opacity: 0.15; }
+    50%  { transform: translate(140px, -90px) scale(1.15); opacity: 0.20; }
+    100% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+}
+
+@keyframes drift-3 {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(-160px, -60px) scale(1.3); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+
+/* Fine film grain for tactile, premium texture */
+.grain {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 .container {
@@ -1036,24 +1086,235 @@ section {
     margin-top: 0.5rem;
 }
 
-/* Scroll reveal (only active when JS is enabled; respects reduced motion) */
-.js section.reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+/* ============================================================
+   MOTION SYSTEM
+   All "start hidden" states live inside (prefers-reduced-motion:
+   no-preference) so users who opt out of motion always see fully
+   rendered content with zero JS dependency.
+   ============================================================ */
+
+/* Scroll progress bar */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    z-index: 200;
+    pointer-events: none;
 }
 
-.js section.reveal.is-visible {
-    opacity: 1;
-    transform: none;
-}
+@media (prefers-reduced-motion: no-preference) {
 
-@media (prefers-reduced-motion: reduce) {
-    .js section.reveal {
-        opacity: 1 !important;
-        transform: none !important;
-        transition: none !important;
+    /* --- Hero entrance cascade (plays on load via html.ready) --- */
+    .js .hero h1,
+    .js .hero .hero-subtitle,
+    .js .hero .hero-desc,
+    .js .hero .hero-contact,
+    .js .hero .hero-actions,
+    .js .hero .hero-tag {
+        opacity: 0;
+        transform: translateY(26px);
+        transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
     }
+
+    .js .hero h1 { transition-delay: 0.05s; }
+    .js .hero .hero-subtitle { transition-delay: 0.15s; }
+    .js .hero .hero-desc { transition-delay: 0.25s; }
+    .js .hero .hero-contact { transition-delay: 0.35s; }
+    .js .hero .hero-actions { transition-delay: 0.45s; }
+    .js .hero .hero-tag { transition-delay: 0.55s; }
+
+    .js.ready .hero h1,
+    .js.ready .hero .hero-subtitle,
+    .js.ready .hero .hero-desc,
+    .js.ready .hero .hero-contact,
+    .js.ready .hero .hero-actions,
+    .js.ready .hero .hero-tag {
+        opacity: 1;
+        transform: none;
+    }
+
+    /* --- Staggered scroll reveals (children animate when section enters) --- */
+    .js .reveal .section-header,
+    .js .reveal .timeline-item,
+    .js .reveal .projects-grid > .card,
+    .js .reveal .skills-filter,
+    .js .reveal .skills-grid > .card,
+    .js .reveal .education-card,
+    .js .reveal .stats-grid > *,
+    .js .reveal .about-content > p,
+    .js .reveal .contact-cta > * {
+        opacity: 0;
+        transform: translateY(34px);
+        transition: opacity 0.75s var(--ease-out-expo), transform 0.75s var(--ease-out-expo);
+        will-change: opacity, transform;
+    }
+
+    .js .reveal.is-visible .section-header,
+    .js .reveal.is-visible .timeline-item,
+    .js .reveal.is-visible .projects-grid > .card,
+    .js .reveal.is-visible .skills-filter,
+    .js .reveal.is-visible .skills-grid > .card,
+    .js .reveal.is-visible .education-card,
+    .js .reveal.is-visible .stats-grid > *,
+    .js .reveal.is-visible .about-content > p,
+    .js .reveal.is-visible .contact-cta > * {
+        opacity: 1;
+        transform: none;
+    }
+
+    /* Stagger: content trails its section header */
+    .js .reveal.is-visible .timeline-item:nth-child(2),
+    .js .reveal.is-visible .projects-grid > .card:nth-child(2),
+    .js .reveal.is-visible .skills-grid > .card:nth-child(2),
+    .js .reveal.is-visible .stats-grid > *:nth-child(2),
+    .js .reveal.is-visible .about-content > p:nth-child(2),
+    .js .reveal.is-visible .contact-cta > *:nth-child(2) { transition-delay: 0.10s; }
+
+    .js .reveal.is-visible .timeline-item:nth-child(3),
+    .js .reveal.is-visible .projects-grid > .card:nth-child(3),
+    .js .reveal.is-visible .skills-grid > .card:nth-child(3),
+    .js .reveal.is-visible .contact-cta > *:nth-child(3) { transition-delay: 0.20s; }
+
+    .js .reveal.is-visible .skills-grid > .card:nth-child(4),
+    .js .reveal.is-visible .contact-cta > *:nth-child(4) { transition-delay: 0.30s; }
+
+    .js .reveal.is-visible .skills-grid > .card:nth-child(5),
+    .js .reveal.is-visible .contact-cta > *:nth-child(5) { transition-delay: 0.40s; }
+}
+
+/* --- Cursor spotlight on cards (the glow tracks the pointer) --- */
+.card,
+.timeline-content {
+    isolation: isolate;
+}
+
+.card::after,
+.timeline-content::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(480px circle at var(--mx, 50%) var(--my, 50%),
+            rgba(var(--primary-rgb), 0.10), transparent 42%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.card:hover::after,
+.timeline-content:hover::after {
+    opacity: 1;
+}
+
+.card > *,
+.timeline-content > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* --- Refined premium card hover --- */
+.card:hover,
+.timeline-content:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-premium), var(--shadow-premium-glow);
+    border-color: rgba(var(--primary-rgb), 0.35);
+}
+
+/* --- Animated nav link underline --- */
+.nav-link {
+    position: relative;
+}
+
+.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform 0.35s var(--ease-out-expo);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    transform: scaleX(1);
+}
+
+/* Buttons get a springier press feel */
+.btn {
+    transition: transform 0.35s var(--ease-out-expo), background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    will-change: transform;
+}
+
+/* --- Custom cursor: instant dot + smoothly-trailing ring --- */
+.cursor-dot,
+.cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    will-change: transform;
+}
+
+.cursor-dot {
+    width: 7px;
+    height: 7px;
+    margin: -3.5px 0 0 -3.5px;
+    background: var(--primary);
+}
+
+.cursor-ring {
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    border: 1.5px solid rgba(var(--primary-rgb), 0.45);
+    transition: opacity 0.25s ease,
+        width 0.28s var(--ease-out-expo),
+        height 0.28s var(--ease-out-expo),
+        margin 0.28s var(--ease-out-expo),
+        background 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.has-custom-cursor .cursor-dot.is-active,
+.has-custom-cursor .cursor-ring.is-active {
+    opacity: 1;
+}
+
+/* Ring reacts to interactive elements */
+.cursor-ring.is-hover {
+    width: 56px;
+    height: 56px;
+    margin: -28px 0 0 -28px;
+    background: rgba(var(--primary-rgb), 0.08);
+    border-color: rgba(var(--primary-rgb), 0.85);
+}
+
+/* Ring tightens on press */
+.cursor-ring.is-down {
+    width: 26px;
+    height: 26px;
+    margin: -13px 0 0 -13px;
+}
+
+/* Hide the native cursor only when the custom one is actually active */
+.has-custom-cursor,
+.has-custom-cursor * {
+    cursor: none !important;
 }
 
 /* Footer */
