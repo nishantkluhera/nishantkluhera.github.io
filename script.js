@@ -11,13 +11,28 @@ document.addEventListener('DOMContentLoaded', () => {
     updateThemeIcon(root.classList.contains('light-theme') ? 'light' : 'dark');
 
     themeBtn.addEventListener('click', () => {
-        root.classList.toggle('light-theme');
-        const currentTheme = root.classList.contains('light-theme') ? 'light' : 'dark';
-        localStorage.setItem('theme', currentTheme);
-        updateThemeIcon(currentTheme);
-        updateLeetCodeCardTheme(currentTheme);
-        updateGitHubCardTheme(currentTheme);
-        updateCodeforcesCardTheme(currentTheme);
+        const apply = () => {
+            root.classList.toggle('light-theme');
+            const currentTheme = root.classList.contains('light-theme') ? 'light' : 'dark';
+            localStorage.setItem('theme', currentTheme);
+            updateThemeIcon(currentTheme);
+            updateLeetCodeCardTheme(currentTheme);
+            updateCodeforcesCardTheme(currentTheme);
+        };
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        // Animated circular wipe from the toggle (View Transitions API).
+        if (!document.startViewTransition || reduce) { apply(); return; }
+        const rect = themeBtn.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+        const endRadius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+        const transition = document.startViewTransition(apply);
+        transition.ready.then(() => {
+            root.animate(
+                { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`] },
+                { duration: 520, easing: 'cubic-bezier(0.76, 0, 0.24, 1)', pseudoElement: '::view-transition-new(root)' }
+            );
+        });
     });
     
     function updateThemeIcon(theme) {
@@ -194,7 +209,8 @@ document.addEventListener('DOMContentLoaded', () => {
         spySections.forEach(s => spy.observe(s));
     }
 
-    // 10. Hero entrance cascade — trigger after first paint
+    // 10. Kinetic hero name, then trigger the entrance after first paint
+    kineticHero();
     requestAnimationFrame(() => {
         requestAnimationFrame(() => document.documentElement.classList.add('ready'));
     });
@@ -323,7 +339,317 @@ document.addEventListener('DOMContentLoaded', () => {
             window.addEventListener('pointerup', () => ring.classList.remove('is-down'));
         }
     }
+
+    // 15. Count-up numbers, live GitHub panel, timeline progress fill
+    initCountUps();
+    initGitHubPanel();
+    initTimelineProgress();
+
+    // 16. Command palette (⌘K / Ctrl+K)
+    initCommandPalette();
 });
+
+// ---------- Count-up animation ----------
+function animateCount(el, target, decimals, suffix, prefix, duration) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fmt = (v) => prefix + v.toFixed(decimals) + suffix;
+    if (reduce) { el.textContent = fmt(target); return; }
+    const start = performance.now();
+    const ease = (t) => 1 - Math.pow(1 - t, 3);
+    const step = (now) => {
+        const p = Math.min((now - start) / duration, 1);
+        el.textContent = fmt(target * ease(p));
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = fmt(target);
+    };
+    requestAnimationFrame(step);
+}
+
+function setupCountUp(el) {
+    const target = parseFloat(el.dataset.count);
+    if (isNaN(target)) return;
+    const decimals = parseInt(el.dataset.decimals || '0', 10);
+    const suffix = el.dataset.suffix || '';
+    const prefix = el.dataset.prefix || '';
+    const run = () => animateCount(el, target, decimals, suffix, prefix, 1600);
+    if ('IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries, o) => {
+            entries.forEach(e => { if (e.isIntersecting) { run(); o.unobserve(e.target); } });
+        }, { threshold: 0.4 });
+        obs.observe(el);
+    } else {
+        run();
+    }
+}
+
+function initCountUps() {
+    document.querySelectorAll('[data-count]').forEach(setupCountUp);
+}
+
+// ---------- Live GitHub panel ----------
+async function initGitHubPanel() {
+    const panel = document.getElementById('gh-panel');
+    if (!panel) return;
+    const user = panel.dataset.user;
+    const statsEl = document.getElementById('gh-stats');
+    const langsEl = document.getElementById('gh-langs');
+    const reposEl = document.getElementById('gh-repos');
+    try {
+        const data = await fetchGitHubData(user);
+        renderGitHubPanel(data, statsEl, langsEl, reposEl);
+    } catch (e) {
+        if (statsEl) statsEl.innerHTML = '';
+        if (langsEl) langsEl.innerHTML = '';
+        if (reposEl) {
+            reposEl.innerHTML = '<a class="stats-fallback" href="https://github.com/' + user +
+                '" target="_blank" rel="noopener">View GitHub profile →</a>';
+        }
+    }
+}
+
+async function fetchGitHubData(user) {
+    const key = 'ghpanel:' + user;
+    try { const c = sessionStorage.getItem(key); if (c) return JSON.parse(c); } catch (e) {}
+    const [uRes, rRes] = await Promise.all([
+        fetch('https://api.github.com/users/' + user),
+        fetch('https://api.github.com/users/' + user + '/repos?per_page=100&sort=pushed')
+    ]);
+    if (!uRes.ok || !rRes.ok) throw new Error('GitHub API error');
+    const u = await uRes.json();
+    const repos = (await rRes.json()).filter(r => !r.fork);
+    const langCount = {};
+    repos.forEach(r => { if (r.language) langCount[r.language] = (langCount[r.language] || 0) + 1; });
+    const languages = Object.keys(langCount).sort((a, b) => langCount[b] - langCount[a]);
+    const recent = repos
+        .filter(r => r.name.toLowerCase() !== user.toLowerCase() && !/\.github\.io$/i.test(r.name))
+        .slice(0, 4)
+        .map(r => ({ name: r.name, description: r.description, language: r.language, stars: r.stargazers_count, url: r.html_url }));
+    const result = {
+        repos: u.public_repos,
+        projects: repos.length,
+        languages: languages.length,
+        topLanguages: languages.slice(0, 6),
+        recent: recent
+    };
+    try { sessionStorage.setItem(key, JSON.stringify(result)); } catch (e) {}
+    return result;
+}
+
+function ghEscape(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function langColor(lang) {
+    const map = {
+        Python: '#3572A5', JavaScript: '#f1e05a', TypeScript: '#3178c6', HTML: '#e34c26',
+        CSS: '#563d7c', 'C++': '#f34b7d', C: '#555555', Go: '#00ADD8', Rust: '#dea584',
+        Java: '#b07219', 'Jupyter Notebook': '#DA5B0B', Shell: '#89e051'
+    };
+    return map[lang] || 'var(--primary)';
+}
+
+function renderGitHubPanel(d, statsEl, langsEl, reposEl) {
+    if (statsEl) {
+        statsEl.innerHTML = [
+            [d.repos, 'Repositories'],
+            [d.projects, 'Projects'],
+            [d.languages, 'Languages']
+        ].map(([n, label]) =>
+            `<div class="gh-stat"><span class="gh-stat-num" data-count="${n}">0</span><span class="gh-stat-label">${label}</span></div>`
+        ).join('');
+        statsEl.querySelectorAll('.gh-stat-num').forEach(setupCountUp);
+    }
+    if (langsEl) {
+        langsEl.innerHTML = d.topLanguages.map(l =>
+            `<span class="gh-lang"><span class="gh-lang-dot" style="background:${langColor(l)}"></span>${ghEscape(l)}</span>`
+        ).join('');
+    }
+    if (reposEl) {
+        reposEl.innerHTML = d.recent.map(r =>
+            '<a class="gh-repo" href="' + ghEscape(r.url) + '" target="_blank" rel="noopener">' +
+            '<span class="gh-repo-name">' + ghEscape(r.name) + '</span>' +
+            '<span class="gh-repo-desc">' + ghEscape(r.description || 'No description provided.') + '</span>' +
+            '<span class="gh-repo-meta">' +
+            (r.language ? '<span><span class="gh-lang-dot" style="background:' + langColor(r.language) + '"></span>' + ghEscape(r.language) + '</span>' : '') +
+            (r.stars > 0 ? '<span>★ ' + r.stars + '</span>' : '') +
+            '</span></a>'
+        ).join('');
+    }
+}
+
+// ---------- Timeline scroll progress ----------
+function initTimelineProgress() {
+    const timeline = document.querySelector('.timeline');
+    const fill = document.getElementById('timeline-progress');
+    if (!timeline || !fill) return;
+    const dots = Array.prototype.slice.call(document.querySelectorAll('.timeline-dot'));
+    let ticking = false;
+    const update = () => {
+        ticking = false;
+        const rect = timeline.getBoundingClientRect();
+        const readLine = window.innerHeight * 0.6;
+        let filled = Math.max(0, Math.min(readLine - rect.top, rect.height));
+        fill.style.height = filled + 'px';
+        dots.forEach(dot => {
+            const dRect = dot.getBoundingClientRect();
+            const dotY = dRect.top + dRect.height / 2 - rect.top;
+            dot.classList.toggle('reached', dotY <= filled);
+        });
+    };
+    window.addEventListener('scroll', () => {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
+}
+
+// ---------- Kinetic hero: split the name into animatable characters ----------
+function kineticHero() {
+    const h1 = document.querySelector('.hero h1');
+    if (!h1 || h1.classList.contains('kinetic')) return;
+    const nameSpan = h1.querySelector('span');
+    const namePart = nameSpan ? nameSpan.textContent : '';
+    let leadText = '';
+    for (const node of h1.childNodes) {
+        if (node === nameSpan) break;
+        if (node.nodeType === 3) leadText += node.textContent;
+    }
+    h1.textContent = '';
+    let idx = 0;
+    const addChars = (text, gradient) => {
+        Array.prototype.forEach.call(text, (ch) => {
+            const s = document.createElement('span');
+            s.className = 'char' + (gradient ? ' grad-char' : '');
+            s.style.setProperty('--i', idx++);
+            if (ch === ' ') s.innerHTML = '&nbsp;';
+            else s.textContent = ch;
+            h1.appendChild(s);
+        });
+    };
+    addChars(leadText, false);
+    addChars(namePart, true);
+    h1.classList.add('kinetic');
+}
+
+// ---------- Command palette (Cmd/Ctrl + K) ----------
+function initCommandPalette() {
+    const cmdk = document.getElementById('cmdk');
+    const input = document.getElementById('cmdk-input');
+    const list = document.getElementById('cmdk-list');
+    const empty = document.getElementById('cmdk-empty');
+    const trigger = document.getElementById('cmdk-trigger');
+    if (!cmdk || !input || !list) return;
+
+    const ICONS = {
+        nav: '<svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"></polyline></svg>',
+        action: '<svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>',
+        link: '<svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>'
+    };
+
+    const goTo = (sel) => () => {
+        const t = document.querySelector(sel);
+        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    const openUrl = (url) => () => window.open(url, '_blank', 'noopener');
+
+    const commands = [
+        { label: 'About', hint: 'Section', type: 'nav', kw: 'bio who am i', action: goTo('#about') },
+        { label: 'Experience', hint: 'Section', type: 'nav', kw: 'work history jobs career', action: goTo('#experience') },
+        { label: 'Projects', hint: 'Section', type: 'nav', kw: 'work atlasinfer codequorum ecg', action: goTo('#projects') },
+        { label: 'Skills', hint: 'Section', type: 'nav', kw: 'tech stack languages', action: goTo('#skills') },
+        { label: 'Education', hint: 'Section', type: 'nav', kw: 'university degree bml munjal', action: goTo('#education') },
+        { label: 'Open Source', hint: 'Section', type: 'nav', kw: 'github stats repos codeforces leetcode', action: goTo('#stats') },
+        { label: 'Contact', hint: 'Section', type: 'nav', kw: 'email hire reach out', action: goTo('#contact') },
+        { label: 'Toggle theme', hint: 'Action', type: 'action', kw: 'dark light mode appearance', action: () => { const b = document.getElementById('theme-toggle'); if (b) b.click(); } },
+        { label: 'View Résumé (PDF)', hint: 'Open', type: 'link', kw: 'resume cv download', action: openUrl('resume.pdf') },
+        { label: 'GitHub', hint: 'Profile', type: 'link', kw: 'code repos source', action: openUrl('https://github.com/nishantkluhera') },
+        { label: 'LinkedIn', hint: 'Profile', type: 'link', kw: 'work network', action: openUrl('https://linkedin.com/in/nishantkluhera') },
+        { label: 'Twitter', hint: 'Profile', type: 'link', kw: 'x social', action: openUrl('https://twitter.com/luheranishant') },
+        { label: 'Email me', hint: 'Action', type: 'action', kw: 'mail contact hire', action: () => { window.location.href = 'mailto:nishantkluhera@gmail.com'; } },
+        { label: 'Copy email address', hint: 'Action', type: 'action', kw: 'mail clipboard', action: () => { if (navigator.clipboard) navigator.clipboard.writeText('nishantkluhera@gmail.com'); } }
+    ];
+
+    let filtered = commands.slice();
+    let active = 0;
+
+    function render() {
+        list.innerHTML = filtered.map((c, i) =>
+            '<li class="cmdk-item' + (i === active ? ' is-active' : '') + '" role="option" data-i="' + i +
+            '" aria-selected="' + (i === active) + '">' +
+            '<span class="cmdk-ico">' + (ICONS[c.type] || ICONS.nav) + '</span>' +
+            '<span class="cmdk-label">' + c.label + '</span>' +
+            '<span class="cmdk-hint">' + (c.hint || '') + '</span></li>'
+        ).join('');
+        empty.hidden = filtered.length > 0;
+        list.hidden = filtered.length === 0;
+    }
+
+    function filter(q) {
+        q = q.trim().toLowerCase();
+        filtered = !q ? commands.slice() : commands.filter(c =>
+            (c.label + ' ' + (c.kw || '') + ' ' + (c.hint || '')).toLowerCase().indexOf(q) !== -1);
+        active = 0;
+        render();
+    }
+
+    function ensureVisible() {
+        const el = list.querySelector('.cmdk-item.is-active');
+        if (el) el.scrollIntoView({ block: 'nearest' });
+    }
+
+    function openPalette() {
+        cmdk.hidden = false;
+        document.documentElement.style.overflow = 'hidden';
+        input.value = '';
+        filter('');
+        input.focus();
+    }
+
+    function closePalette() {
+        if (cmdk.hidden) return;
+        cmdk.hidden = true;
+        document.documentElement.style.overflow = '';
+        if (trigger) trigger.focus();
+    }
+
+    function exec(i) {
+        const c = filtered[i];
+        if (!c) return;
+        closePalette();
+        setTimeout(() => c.action(), 0);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+            e.preventDefault();
+            cmdk.hidden ? openPalette() : closePalette();
+            return;
+        }
+        if (cmdk.hidden) return;
+        if (e.key === 'Escape') { e.preventDefault(); closePalette(); }
+        else if (e.key === 'ArrowDown') { e.preventDefault(); active = Math.min(active + 1, filtered.length - 1); render(); ensureVisible(); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); active = Math.max(active - 1, 0); render(); ensureVisible(); }
+        else if (e.key === 'Enter') { e.preventDefault(); exec(active); }
+        else if (e.key === 'Tab') { e.preventDefault(); } // keep focus trapped on the input
+    });
+
+    input.addEventListener('input', () => filter(input.value));
+    list.addEventListener('click', (e) => {
+        const item = e.target.closest('.cmdk-item');
+        if (item) exec(parseInt(item.dataset.i, 10));
+    });
+    list.addEventListener('mousemove', (e) => {
+        const item = e.target.closest('.cmdk-item');
+        if (item) {
+            const i = parseInt(item.dataset.i, 10);
+            if (i !== active) { active = i; render(); }
+        }
+    });
+    cmdk.addEventListener('click', (e) => {
+        if (e.target.hasAttribute('data-cmdk-close')) closePalette();
+    });
+    if (trigger) trigger.addEventListener('click', openPalette);
+}
 
 // LeetCode Stats Card Theme Sync
 function updateLeetCodeCardTheme(theme) {
