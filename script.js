@@ -347,6 +347,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 16. Command palette (⌘K / Ctrl+K)
     initCommandPalette();
+
+    // 17. Skill usage tooltips (where each skill was used)
+    initSkillUsage();
 });
 
 // ---------- Count-up animation ----------
@@ -501,6 +504,115 @@ function initTimelineProgress() {
     }, { passive: true });
     window.addEventListener('resize', update, { passive: true });
     update();
+}
+
+// ---------- Skill usage: where each skill was actually used ----------
+// 'p' = project, 'e' = experience. A string value = a plain note (no list).
+const SKILL_USAGE = {
+    'Python': [['AtlasInfer', 'p'], ['ECG Analysis Suite', 'p'], ['Livepeer', 'e'], ['IIT Bombay (NLP)', 'e']],
+    'TypeScript': [['AutoMarket', 'e'], ['CodeQuorum', 'p']],
+    'C/C++': 'Coursework — Data Structures & Operating Systems',
+    'PyTorch': [['AtlasInfer', 'p'], ['ECG Analysis Suite', 'p']],
+    'CUDA': [['AtlasInfer', 'p']],
+    'Triton': [['AtlasInfer', 'p']],
+    'HuggingFace Diffusers': [['Livepeer', 'e']],
+    'LLM APIs (Anthropic, DeepSeek)': [['AutoMarket', 'e'], ['IIT Bombay (NLP)', 'e']],
+    'Quantization (INT8/NF4)': [['AtlasInfer', 'p']],
+    'scikit-learn': [['ECG Analysis Suite', 'p']],
+    'OpenCV': [['ECG Analysis Suite', 'p']],
+    'Docker': [['Livepeer', 'e']],
+    'Git': 'Used across every project and role',
+    'SQLite (WAL)': [['AutoMarket', 'e'], ['CodeQuorum', 'p']],
+    'Multi-tenant Architecture': [['AutoMarket', 'e']],
+    'Node.js': [['AutoMarket', 'e'], ['CodeQuorum', 'p']],
+    'Express.js': [['AutoMarket', 'e']],
+    'FastAPI': [['Livepeer', 'e']],
+    'REST APIs': [['AutoMarket', 'e']],
+    'WebSockets / Socket.IO': [['CodeQuorum', 'p']],
+    'React.js': [['AutoMarket', 'e']],
+    'Next.js': [['AutoMarket', 'e']],
+    'HTML5/CSS3': 'Including this portfolio (hand-written, no framework)'
+};
+
+function initSkillUsage() {
+    const badges = document.querySelectorAll('.skill-badge');
+    if (!badges.length) return;
+
+    const tip = document.createElement('div');
+    tip.className = 'skill-tip';
+    tip.setAttribute('role', 'tooltip');
+    tip.hidden = true;
+    document.body.appendChild(tip);
+
+    const typeLabel = (t) => (t === 'p' ? 'Project' : 'Experience');
+
+    const renderTip = (skill, uses) => {
+        let body;
+        if (Array.isArray(uses)) {
+            body = '<div class="skill-tip-label">Used in</div>' + uses.map(([name, type]) =>
+                '<div class="skill-tip-item">' +
+                '<span class="skill-tip-name ' + type + '"><span class="dot"></span>' + name + '</span>' +
+                '<span class="skill-tip-type ' + type + '">' + typeLabel(type) + '</span>' +
+                '</div>').join('');
+        } else {
+            body = '<div class="skill-tip-note">' + (uses || 'Part of my core toolkit') + '</div>';
+        }
+        return '<div class="skill-tip-title">' + skill + '</div>' + body;
+    };
+
+    let current = null;
+
+    const show = (badge) => {
+        const skill = badge.textContent.trim();
+        const uses = SKILL_USAGE[skill];
+        current = badge;
+        tip.innerHTML = renderTip(skill, uses);
+        tip.hidden = false;
+        tip.style.opacity = '0';
+        // Measure, then position centered on the badge, clamped to the viewport.
+        const r = badge.getBoundingClientRect();
+        const tw = tip.offsetWidth;
+        const th = tip.offsetHeight;
+        const half = tw / 2;
+        let cx = r.left + r.width / 2;
+        cx = Math.max(8 + half, Math.min(cx, window.innerWidth - 8 - half));
+        tip.style.left = cx + 'px';
+        // Prefer above the badge; flip below when there isn't room.
+        if (r.top - th - 12 < 8) {
+            tip.style.top = (r.bottom + 10) + 'px';
+            tip.style.transform = 'translate(-50%, 0)';
+        } else {
+            tip.style.top = (r.top - 10) + 'px';
+            tip.style.transform = 'translate(-50%, -100%)';
+        }
+        tip.style.opacity = '1';
+    };
+
+    const hide = (badge) => {
+        if (badge && badge !== current) return;
+        current = null;
+        tip.style.opacity = '0';
+        tip.hidden = true;
+    };
+
+    badges.forEach(badge => {
+        const skill = badge.textContent.trim();
+        const uses = SKILL_USAGE[skill];
+        if (Array.isArray(uses)) {
+            badge.setAttribute('data-linked', '');
+            badge.setAttribute('aria-label', skill + ' — used in ' + uses.map(u => u[0]).join(', '));
+        } else {
+            badge.setAttribute('aria-label', skill + (uses ? ' — ' + uses : ''));
+        }
+        badge.tabIndex = 0;
+        badge.addEventListener('pointerenter', () => show(badge));
+        badge.addEventListener('pointerleave', () => hide(badge));
+        badge.addEventListener('focus', () => show(badge));
+        badge.addEventListener('blur', () => hide(badge));
+    });
+
+    // Keep the fixed-position tooltip from detaching if the page scrolls.
+    window.addEventListener('scroll', () => hide(current), { passive: true });
 }
 
 // ---------- Kinetic hero: split the name into animatable characters ----------
