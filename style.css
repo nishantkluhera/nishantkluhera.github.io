@@ -2355,39 +2355,49 @@ main {
 .inverted .section-header::after { color: var(--ink-muted); opacity: 0.55; }
 .inverted p { color: var(--ink-muted); }
 
-/* Cards inside a panel go bare — content rests directly on the paper */
-.inverted .card {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    padding: 0;
+/* Distinct light cards resting on the paper (no jade spotlight) */
+.inverted .card,
+.inverted .timeline-content {
+    background: #fbf8ef;
+    border: 1px solid var(--paper-border);
+    box-shadow: 0 1px 2px rgba(28, 27, 23, 0.05);
 }
 
-.inverted .card::after { display: none; }
+.inverted .card::after,
+.inverted .timeline-content::after { display: none; }
 
-.inverted .card:hover {
-    transform: none;
-    box-shadow: none;
-    border-color: transparent;
+.inverted .card:hover,
+.inverted .timeline-content:hover {
+    transform: translateY(-3px);
+    border-color: #d8ccb2;
+    box-shadow: 0 12px 28px rgba(28, 27, 23, 0.10);
 }
 
-/* About */
-.inverted .about-content { color: var(--ink-muted); }
-
-/* Education */
-.inverted .education-title-group h3 { color: var(--ink); }
-.inverted .education-degree { color: var(--ink-muted); }
-.inverted .coursework-title { color: var(--ink); }
-
-.inverted .coursework-chip {
-    background: rgba(28, 27, 23, 0.04);
-    color: var(--ink);
-    border-color: var(--paper-border);
-}
-
+/* Date pills within panels */
 .inverted .timeline-date {
     background: rgba(28, 27, 23, 0.06);
     color: var(--ink-muted);
+}
+
+/* Experience (timeline) on paper */
+.inverted .timeline::before { background: var(--paper-border); }
+.inverted .timeline-dot { background: var(--paper); }
+.inverted .timeline-title-group h3 { color: var(--ink); }
+.inverted .company-meta { color: var(--ink-muted); }
+.inverted .timeline-body li { color: var(--ink-muted); }
+
+/* Projects on paper */
+.inverted .project-index { color: var(--primary-hover); }
+.inverted .project-title { color: var(--ink); }
+.inverted .project-link { color: var(--ink-muted); }
+.inverted .project-link:hover { color: var(--primary-hover); }
+.inverted .project-desc { color: var(--ink-muted); }
+.inverted .metric-label { color: var(--ink-muted); }
+.inverted .project-metrics { border-top-color: var(--paper-border); }
+
+.inverted .project-tag {
+    background: rgba(28, 27, 23, 0.05);
+    color: var(--ink);
 }
 
 /* Contact */
