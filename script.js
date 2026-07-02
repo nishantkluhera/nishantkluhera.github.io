@@ -676,7 +676,7 @@ function initCommandPalette() {
         { label: 'View Résumé (PDF)', hint: 'Open', type: 'link', kw: 'resume cv download', action: openUrl('resume.pdf') },
         { label: 'GitHub', hint: 'Profile', type: 'link', kw: 'code repos source', action: openUrl('https://github.com/nishantkluhera') },
         { label: 'LinkedIn', hint: 'Profile', type: 'link', kw: 'work network', action: openUrl('https://linkedin.com/in/nishantkluhera') },
-        { label: 'Twitter', hint: 'Profile', type: 'link', kw: 'x social', action: openUrl('https://twitter.com/luheranishant') },
+        { label: 'Twitter', hint: 'Profile', type: 'link', kw: 'x social', action: openUrl('https://twitter.com/243nishant') },
         { label: 'Email me', hint: 'Action', type: 'action', kw: 'mail contact hire', action: () => { window.location.href = 'mailto:nishantkluhera@gmail.com'; } },
         { label: 'Copy email address', hint: 'Action', type: 'action', kw: 'mail clipboard', action: () => { if (navigator.clipboard) navigator.clipboard.writeText('nishantkluhera@gmail.com'); } }
     ];

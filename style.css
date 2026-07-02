@@ -5,7 +5,9 @@
 :root {
     --font-heading: 'Outfit', sans-serif;
     --font-body: 'Inter', sans-serif;
-    
+    --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
     /* Dark Theme (Default) */
     --bg: #09090b;
     --bg-rgb: 9, 9, 11;
@@ -207,15 +209,24 @@ body {
     100% { transform: translate(0, 0) scale(1); }
 }
 
-/* Fine film grain for tactile, premium texture */
+/* Paper texture: fine tooth (high-freq fibers) + coarse mottle (uneven
+   handmade-paper blotches). Soft-light on dark lightens specks; multiply on
+   light darkens them — so it reads as paper in both themes. */
 .grain {
     position: fixed;
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    opacity: 0.035;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.6;
+    mix-blend-mode: soft-light;
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E");
+    background-size: 150px 150px, 620px 620px;
+}
+
+.light-theme .grain {
+    opacity: 0.5;
 }
 
 .container {
@@ -377,6 +388,37 @@ section {
     justify-content: center;
     padding-top: 6rem;
     padding-bottom: 5rem;
+    position: relative;
+}
+
+/* Keep hero content above the engraving motif */
+.hero > *:not(.hero-motif) {
+    position: relative;
+    z-index: 1;
+}
+
+/* Duotone classical engraving (rays + dial rings) behind the hero */
+.hero-motif {
+    position: absolute;
+    top: 50%;
+    right: -6%;
+    transform: translateY(-50%);
+    width: min(600px, 60vw);
+    height: auto;
+    color: var(--primary);
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
+    mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
+}
+
+@media (max-width: 768px) {
+    .hero-motif {
+        right: -30%;
+        width: 105vw;
+        opacity: 0.07;
+    }
 }
 
 .hero-tag {
@@ -2126,4 +2168,99 @@ footer {
     a {
         text-decoration: underline;
     }
+}
+
+/* ============================================================
+   NOUS / HERMES-INSPIRED TYPE SYSTEM
+   Classical serif for display headings, monospace for labels,
+   dashed cut-line rules — a "printed technical manuscript" feel.
+   (Placed last so it overrides the earlier font-family rules.)
+   ============================================================ */
+
+/* Serif display for headings and big numerals */
+.logo,
+.hero h1,
+.section-title,
+.timeline-title-group h3,
+.project-title,
+.education-title-group h3,
+.skill-category-title,
+.stats-title,
+.skill-tip-title,
+.metric-num,
+.gh-stat-num {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+}
+
+.section-title,
+.hero h1 {
+    font-weight: 600;
+}
+
+/* Monospace, uppercase labels */
+.section-tag,
+.timeline-date,
+.coursework-title,
+.gh-stat-label,
+.metric-label,
+.skill-tip-label {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+.section-tag {
+    font-size: 0.72rem;
+}
+
+.timeline-date {
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+}
+
+/* Dashed cut-line rules between sections and under headings */
+section {
+    border-bottom-style: dashed;
+}
+
+footer {
+    border-top-style: dashed;
+}
+
+.skill-category-title {
+    border-bottom-style: dashed;
+}
+
+.project-metrics {
+    border-top-style: dashed;
+}
+
+/* Numbered project labels (Hermes feature-grid style) */
+.project-index {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--primary);
+    margin-bottom: 0.9rem;
+}
+
+/* Giant closing wordmark that bleeds off both edges */
+.bleed-word {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(4rem, 20vw, 15rem);
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    letter-spacing: -0.03em;
+    padding: 3rem 0 1.5rem;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(var(--primary-rgb), 0.4);
+    text-stroke: 1.5px rgba(var(--primary-rgb), 0.4);
+    user-select: none;
 }
