@@ -2311,3 +2311,86 @@ main {
     color: var(--text-muted);
     opacity: 0.5;
 }
+
+/* ============================================================
+   INVERTED "PAPER" PANELS (Hermes white-panel device)
+   Warm cream blocks with dark ink dropped into the dark site.
+   Applied to About, Education, Contact for a cream/dark rhythm.
+   ============================================================ */
+.inverted {
+    --ink: #1c1b17;
+    --ink-muted: #5c574c;
+    --paper: #f3eee1;
+    --paper-border: #e4dcc9;
+    background-color: var(--paper);
+    border: 1px solid var(--paper-border);
+    border-radius: var(--radius-lg);
+    padding: 4rem 2.5rem;
+    margin: 2.25rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Paper tooth on the panel itself */
+.inverted::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+    background-size: 150px 150px;
+    mix-blend-mode: multiply;
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+/* Content sits above the paper tooth */
+.inverted > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Ink type within panels */
+.inverted .section-title { color: var(--ink); }
+.inverted .section-tag { color: var(--primary-hover); }
+.inverted .section-header::after { color: var(--ink-muted); opacity: 0.55; }
+.inverted p { color: var(--ink-muted); }
+
+/* Cards inside a panel go bare — content rests directly on the paper */
+.inverted .card {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.inverted .card::after { display: none; }
+
+.inverted .card:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: transparent;
+}
+
+/* About */
+.inverted .about-content { color: var(--ink-muted); }
+
+/* Education */
+.inverted .education-title-group h3 { color: var(--ink); }
+.inverted .education-degree { color: var(--ink-muted); }
+.inverted .coursework-title { color: var(--ink); }
+
+.inverted .coursework-chip {
+    background: rgba(28, 27, 23, 0.04);
+    color: var(--ink);
+    border-color: var(--paper-border);
+}
+
+.inverted .timeline-date {
+    background: rgba(28, 27, 23, 0.06);
+    color: var(--ink-muted);
+}
+
+/* Contact */
+.inverted .contact-item { color: var(--ink-muted); }
+.inverted .contact-item:hover { color: var(--ink); }
+.inverted .contact-item svg { stroke: var(--primary-hover); }
