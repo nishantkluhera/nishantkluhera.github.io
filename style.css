@@ -1556,6 +1556,7 @@ section {
 @media (prefers-reduced-motion: no-preference) {
 
     /* --- Hero entrance cascade (plays on load via html.ready) --- */
+    .js .hero .hero-eyebrow,
     .js .hero .hero-subtitle,
     .js .hero .hero-desc,
     .js .hero .hero-contact,
@@ -1566,12 +1567,14 @@ section {
         transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
     }
 
+    .js .hero .hero-eyebrow { transition-delay: 0.15s; }
     .js .hero .hero-subtitle { transition-delay: 0.35s; }
     .js .hero .hero-desc { transition-delay: 0.45s; }
     .js .hero .hero-contact { transition-delay: 0.55s; }
     .js .hero .hero-actions { transition-delay: 0.65s; }
     .js .hero .hero-tag { transition-delay: 0.75s; }
 
+    .js.ready .hero .hero-eyebrow,
     .js.ready .hero .hero-subtitle,
     .js.ready .hero .hero-desc,
     .js.ready .hero .hero-contact,
@@ -2263,4 +2266,48 @@ footer {
     -webkit-text-stroke: 1.5px rgba(var(--primary-rgb), 0.4);
     text-stroke: 1.5px rgba(var(--primary-rgb), 0.4);
     user-select: none;
+}
+
+/* Hero eyebrow — mono label above the name (Hermes signature) */
+.hero-eyebrow {
+    display: inline-block;
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--primary);
+    margin-bottom: 1.1rem;
+}
+
+/* Footer seed annotation (Nous OUTPUT/SEED motif) */
+.footer-seed {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    opacity: 0.6;
+    margin-top: 0.6rem;
+}
+
+/* Auto-numbered section indices in the header corner */
+main {
+    counter-reset: section;
+}
+
+.section-header {
+    counter-increment: section;
+    position: relative;
+}
+
+.section-header::after {
+    content: counter(section, decimal-leading-zero);
+    position: absolute;
+    top: 0.35rem;
+    right: 0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    opacity: 0.5;
 }
