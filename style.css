@@ -230,7 +230,7 @@ body {
 }
 
 .container {
-    max-width: 1100px;
+    max-width: 1240px;
     margin: 0 auto;
     padding: 0 2rem;
 }
@@ -2148,6 +2148,7 @@ footer {
     .theme-btn,
     .hero-actions,
     #stats,
+    #competitive,
     .skip-link,
     footer {
         display: none !important;
@@ -2404,3 +2405,59 @@ main {
 .inverted .contact-item { color: var(--ink-muted); }
 .inverted .contact-item:hover { color: var(--ink); }
 .inverted .contact-item svg { stroke: var(--primary-hover); }
+
+/* GitHub "Open Source" panel on paper — retint the live stats for cream */
+.inverted .gh-panel { margin-bottom: 0; }
+.inverted .stats-title { color: var(--ink); }
+.inverted .stats-title svg { stroke: var(--primary-hover); }
+.inverted .gh-handle { color: var(--ink-muted); }
+.inverted .gh-profile-link { color: var(--primary-hover); }
+
+.inverted .gh-stat {
+    background: rgba(28, 27, 23, 0.03);
+    border-color: var(--paper-border);
+}
+
+.inverted .gh-stat-num {
+    background: linear-gradient(135deg, var(--primary-hover) 0%, #0d9488 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.inverted .gh-stat-label { color: var(--ink-muted); }
+
+.inverted .gh-lang {
+    color: var(--ink);
+    background: rgba(28, 27, 23, 0.05);
+    border-color: var(--paper-border);
+}
+
+.inverted .gh-repo {
+    background: #fdfbf4;
+    border-color: var(--paper-border);
+}
+
+.inverted .gh-repo:hover {
+    border-color: #d8ccb2;
+    box-shadow: 0 12px 28px rgba(28, 27, 23, 0.10);
+}
+
+.inverted .gh-repo-name { color: var(--ink); }
+.inverted .gh-repo-desc,
+.inverted .gh-repo-meta { color: var(--ink-muted); }
+
+.inverted .repos-loading { color: var(--ink-muted); }
+.inverted .spinner {
+    border-color: var(--paper-border);
+    border-top-color: var(--primary-hover);
+}
+
+.inverted .stats-fallback {
+    color: var(--primary-hover);
+    border-color: var(--paper-border);
+}
+.inverted .stats-fallback:hover {
+    border-color: var(--primary-hover);
+    background: rgba(28, 27, 23, 0.04);
+}

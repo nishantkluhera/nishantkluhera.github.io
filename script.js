@@ -1,6 +1,17 @@
 // Interactivity & Dynamic Data Fetching
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 0. Email de-obfuscation
+    // The address never appears in the raw HTML; it's assembled here at runtime
+    // so non-JS harvesting bots can't scrape it. Humans still get a working
+    // mailto link (and the hero item shows the real address once JS runs).
+    document.querySelectorAll('.js-email').forEach((el) => {
+        const addr = `${el.dataset.u}@${el.dataset.d}`;
+        el.setAttribute('href', `mailto:${addr}`);
+        const label = el.querySelector('.email-text');
+        if (label) label.textContent = addr;
+    });
+
     // 1. Theme Management
     // The .light-theme class is applied to <html> by an inline script in <head>
     // (before first paint) to avoid a flash of the wrong theme.
@@ -670,15 +681,16 @@ function initCommandPalette() {
         { label: 'Projects', hint: 'Section', type: 'nav', kw: 'work atlasinfer codequorum ecg', action: goTo('#projects') },
         { label: 'Skills', hint: 'Section', type: 'nav', kw: 'tech stack languages', action: goTo('#skills') },
         { label: 'Education', hint: 'Section', type: 'nav', kw: 'university degree bml munjal', action: goTo('#education') },
-        { label: 'Open Source', hint: 'Section', type: 'nav', kw: 'github stats repos codeforces leetcode', action: goTo('#stats') },
+        { label: 'Open Source', hint: 'Section', type: 'nav', kw: 'github stats repos contributions bounty', action: goTo('#stats') },
+        { label: 'Competitive Programming', hint: 'Section', type: 'nav', kw: 'codeforces leetcode dsa problems rating contests', action: goTo('#competitive') },
         { label: 'Contact', hint: 'Section', type: 'nav', kw: 'email hire reach out', action: goTo('#contact') },
         { label: 'Toggle theme', hint: 'Action', type: 'action', kw: 'dark light mode appearance', action: () => { const b = document.getElementById('theme-toggle'); if (b) b.click(); } },
         { label: 'View Résumé (PDF)', hint: 'Open', type: 'link', kw: 'resume cv download', action: openUrl('resume.pdf') },
         { label: 'GitHub', hint: 'Profile', type: 'link', kw: 'code repos source', action: openUrl('https://github.com/nishantkluhera') },
         { label: 'LinkedIn', hint: 'Profile', type: 'link', kw: 'work network', action: openUrl('https://linkedin.com/in/nishantkluhera') },
         { label: 'Twitter', hint: 'Profile', type: 'link', kw: 'x social', action: openUrl('https://twitter.com/243nishant') },
-        { label: 'Email me', hint: 'Action', type: 'action', kw: 'mail contact hire', action: () => { window.location.href = 'mailto:nishantkluhera@gmail.com'; } },
-        { label: 'Copy email address', hint: 'Action', type: 'action', kw: 'mail clipboard', action: () => { if (navigator.clipboard) navigator.clipboard.writeText('nishantkluhera@gmail.com'); } }
+        { label: 'Email me', hint: 'Action', type: 'action', kw: 'mail contact hire', action: () => { window.location.href = 'mailto:' + 'nishantkluhera' + '@' + 'gmail' + '.com'; } },
+        { label: 'Copy email address', hint: 'Action', type: 'action', kw: 'mail clipboard', action: () => { if (navigator.clipboard) navigator.clipboard.writeText('nishantkluhera' + '@' + 'gmail' + '.com'); } }
     ];
 
     let filtered = commands.slice();
